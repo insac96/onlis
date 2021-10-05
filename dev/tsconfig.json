@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "es6",
+    "target": "es5",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "allowJs": false,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "lib": ["dom"],
+    "baseUrl": "/",
+    "rootDir": "/"
+  },
+  "include": [
+    "../src/**/*"
+  ],
+  "files": [
+    "../types/index.d.ts",
+    "./vue.d.ts",
+    "./main.ts"
+  ]
+}
