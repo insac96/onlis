@@ -78,9 +78,6 @@ export default class uiSidebar extends uiComponentColor {
     if(!!this.open){
       this.$emit('update:open', false)
     }
-    else {
-      this.removeLayout()
-    }
   }
 
   // Set Layout when Create

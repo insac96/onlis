@@ -1,14 +1,16 @@
 import Vue from 'vue'
 import Onlis from 'onlis'
 
+// Init Directives
 Onlis.initDirectives(Vue)
-Onlis.initComponents(Vue)
-Onlis.updateHydration(Vue)
 
-export default function (ctx, inject) {
-  <% if (options) { %>
-    Onlis.installNuxt(ctx, inject, Vue, options)
-  <% } else { %>
-    Onlis.installNuxt(ctx, inject, Vue)
-  <% } %>
+// Init Components
+Onlis.initComponents(Vue)
+
+// Init Services
+export default async function (ctx, inject) {
+  Onlis.installNuxt(ctx, inject, Vue, <%= serializeFunction(options) %>)
 }
+
+// Update Hydration
+Onlis.updateHydration(Vue)

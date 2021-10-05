@@ -7,9 +7,7 @@ export default class uiSidebarGroup extends uiComponent {
 
   componentName : string = 'sidebar-group'
 
-  @Prop({ type: Boolean }) open! : boolean
-
-  isOpen : boolean = this.open
+  isOpen : boolean = false
 
   // ID
   get id () {

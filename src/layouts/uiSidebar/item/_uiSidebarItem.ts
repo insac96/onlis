@@ -79,22 +79,31 @@ export default class uiSidebarItem extends uiComponentColor {
 
   // Is Pointer
   get isPointer() {
-    return !!this.$listeners.click || !!this.to || !!this.href || (!!this.parentRoot && !is_Undefined(this.parentRoot.value))
+    return !!this.$listeners.click 
+    || !!this.target
+    || !!this.to 
+    || !!this.href 
+    || (!!this.parentRoot && !is_Undefined(this.parentRoot.value) && !!this.value)
   }
 
   // On Item Click
   onClick (event : any) {
-    if(!this.parentRoot) return
+    if(!this.isPointer) return
+
+    // Show Ripple
     this.startRipple(event, this.$el as HTMLElement)
 
+    // If is Target
     if(!!this.target) {
       this.$emit('click', event)
     }
+
+    // Else
     else {
       if(!!this.to || !!this.href){
         this.onLink()
       }
-      else if(!is_Undefined(this.parentRoot.value) && !!this.value){
+      else if(!!this.parentRoot && !is_Undefined(this.parentRoot.value) && !!this.value){
         this.parentRoot.$emit('model', this.value)
       }
 
@@ -107,6 +116,7 @@ export default class uiSidebarItem extends uiComponentColor {
   onCloseWhenCLick () {
     if(!this.parentRoot) return
     if(!this.parentRoot.closeOnItem) return
+    if(!!this.parentRoot.isLayout && !!this.parentRoot.isDesktop) return
 
     setTimeout(() => {
       this.parentRoot.$emit('update:open', false)
@@ -121,36 +131,23 @@ export default class uiSidebarItem extends uiComponentColor {
     this.$el.scrollIntoView()
   }
 
-  // Open Group
-  autoOpenGroup () {
-    if(!this.parentRoot) return
-    if(!this.isActive) return
-
-    if(!!this.parentGroup){
-      this.parentGroup.isOpen = true
-
-      if(!!this.parentGroup.parentGroup){
-        this.parentGroup.parentGroup.isOpen = true
-      }
-    }
-  }
-
+  // Watch Active
   @Watch('isActive')
   onActiveChange () {
     this.scrollTo()
   }
 
-  @Watch('parentRoot.open')
-  onOpenChange (val : boolean) {
-    if(!!val && !!this.isActive){
-      setTimeout(() => {
-        this.$el.scrollIntoView()
-      }, 50)
-    }
-  }
-
+  // Mounted
   mounted () {
-    this.autoOpenGroup()
+    if(!this.parentRoot) return
+    if(!this.parentGroup) return
+    if(!this.isActive) return
+
+    this.parentGroup.isOpen = true
+
+    if(!!this.parentGroup.parentGroup){
+      this.parentGroup.parentGroup.isOpen = true
+    }
   }
 
   // Render
