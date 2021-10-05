@@ -1,0 +1,113 @@
+// Root
+.ui-input
+  --ui-input-width: 100%
+  --ui-input-icon-opacity: 0
+  --ui-input-text: var(--ui-text)
+  --ui-input-placeholder: var(--ui-gray)
+  --ui-input-placeholder-opacity: 1
+  --ui-input-message-color: var(--ui-component-text)
+  --ui-input-message-right-color: var(--ui-component-text)
+
+// Style
+.ui-input
+  &:not(.ui-component-fashion--basic), &--error
+    --ui-input-text: var(--ui-component-text)
+    --ui-input-placeholder: var(--ui-component-text)
+    --ui-input-placeholder-opacity: 0.5
+  
+  &.ui-component--color
+    --ui-input-message-color: var(--ui-color)
+    --ui-input-message-right-color: var(--ui-color)
+
+  .ui-icon-close
+    --ui-icon-close: var(--ui-component-text)
+    --ui-icon-close-size: var(--ui-component-font-size)
+    
+  .ui-loading-root
+    --ui-loading-background: ''
+    --ui-loading-size: calc((var(--ui-component-size) * 0.4))
+
+  &--focus
+    --ui-input-icon-opacity: var(--ui-component-icon-background-opacity)
+
+// Main
+.ui-input
+  align-items: center
+  justify-content: space-between
+  width: var(--ui-input-width)
+  min-height: var(--ui-component-size)
+  padding: 0 calc(var(--ui-space) / 2) 
+  border-radius: var(--ui-radius)
+  font-size: var(--ui-component-font-size)
+
+  &--error
+    &:not(.ui-component-fashion--text, .ui-component--border)
+      &:before
+        box-shadow: 0px -1px rgba(var(--ui-component-text), 1)
+
+  &__icon, &__right
+    position: relative
+    display: flex
+    align-items: center
+    justify-content: center
+    line-height: normal
+    user-select: none
+  
+  &__icon
+    min-width: calc(var(--ui-component-size) * 0.7)
+    min-height: calc(var(--ui-component-size) * 0.7)
+    background: rgba(var(--ui-component-icon-background), var(--ui-input-icon-opacity))
+    color: rgb(var(--ui-component-icon-color))
+    border-radius: var(--ui-radius)
+    transition: all 0.1s ease
+    overflow: hidden
+    * 
+      margin: 0
+    &.ui-component--pointer
+      cursor: pointer
+      &:hover, &:active
+        --ui-input-icon-opacity: var(--ui-component-icon-background-opacity)
+  
+  &__right
+    margin: 0 calc(var(--ui-space) / 2) 
+
+  &__dom
+    flex-grow: 1
+    width: 100%
+    height: var(--ui-component-size)
+    background: none
+    color: rgb(var(--ui-input-text))
+    font-size: inherit
+    padding: 0 calc(var(--ui-space) / 2) 
+    transition: all 0.25s ease
+    &::placeholder
+      color: rgba(var(--ui-input-placeholder), var(--ui-input-placeholder-opacity))
+    &:focus, &--focus
+      padding-left: var(--ui-space)
+    &--dateTime
+      -webkit-appearance: none
+      &:not(.ui-input__dom--hasValue)
+        &::before
+          color: rgb(var(--ui-input-placeholder), var(--ui-input-placeholder-opacity))
+          content: attr(placeholder)
+      &::-webkit-inner-spin-button, &::-webkit-calendar-picker-indicator
+        display: none
+        -webkit-appearance: none
+
+  &__message--left, &__message--right
+    position: absolute
+    top: var(--ui-component-size)
+    padding: calc(var(--ui-space) * 0.5) var(--ui-space)
+    font-size: var(--ui-font-size-xs)
+    font-weight: 500
+    user-select: none
+    line-height: normal
+  &__message--left
+    left: 0
+    color: rgb(var(--ui-input-message-color))
+  &__message--right  
+    right: 0
+    color: rgb(var(--ui-input-message-right-color))
+
+  
+    

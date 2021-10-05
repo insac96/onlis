@@ -1,0 +1,55 @@
+.ui-ripple-root
+  --ui-ripple: var(--ui-component-ripple)
+  --ui-ripple-opacity: var(--ui-component-ripple-opacity)
+  --ui-ripple-duplicate: var(--ui-component-ripple-duplicate)
+  --ui-ripple-duplicate-opacity: var(--ui-component-ripple-duplicate-opacity)
+
+// Main
+.ui-ripple-root
+  position: absolute
+  top: 50%
+  left: 50%
+  width: 100%
+  height: 100%
+  background: none
+  border-radius: inherit
+  overflow: hidden
+  pointer-events: none
+  transform: translate(-50%, -50%)
+  contain: strict
+  z-index: -1
+  
+  .ui-ripple
+    position: absolute
+    border-radius: 50%
+    transform: translate(-50%,-50%) scale(0)
+    
+  &--only
+    .ui-ripple
+      background: rgba(var(--ui-ripple), var(--ui-ripple-opacity))
+      animation: rippleDefault-effect 0.6s linear
+
+  &--start
+    .ui-ripple
+      background: rgba(var(--ui-ripple), var(--ui-ripple-opacity))
+      animation: rippleFlat-effect 0.6s linear forwards
+      &--out
+        transition: all 0.3s linear
+        width: 0px !important
+        height: 0px !important
+        transform: translate(-50%,-50%) scale(0)
+
+  &--duplicate
+    .ui-ripple
+      background: rgba(var(--ui-ripple-duplicate), var(--ui-ripple-duplicate-opacity))
+      animation: rippleDefault-effect 0.6s linear
+
+// Effect
+@keyframes rippleDefault-effect
+  to
+    transform: translate(-50%,-50%) scale(4)
+    opacity: 0
+
+@keyframes rippleFlat-effect
+  to
+    transform: translate(-50%,-50%) scale(4)
