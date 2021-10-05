@@ -1,0 +1,6 @@
+$colors : ("primary", "danger", "success", "warn", "dark", "light", "gray", "content", "child")
+@each $color in $colors
+  .bg-#{$color}
+    background: rgb(var(--ui-#{$color}))
+  .text-#{$color}
+    color: rgb(var(--ui-#{$color}))
