@@ -24,6 +24,7 @@
     "src/",
     "dist/",
     "nuxt/",
+    "lib/",
     "types/"
   ],
   "scripts": {
