@@ -4,3 +4,6 @@ package-lock.json
 # DEV
 dev/
 tsconfig.dev.json
+
+# DIST
+dist/
