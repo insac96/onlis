@@ -1,0 +1,39 @@
+$hs : ("h1", "h2", "h3", "h4", "h5", "h6")
+@each $h in $hs
+  #{$h}
+    font-size: var(--ui-font-size-#{$h})
+  .font-size-#{$h}
+    font-size: var(--ui-font-size-#{$h})
+
+
+$fontSizes : ("xs", "s", "m", "l", "xl")
+@each $size in $fontSizes
+  .font-size-#{$size}
+    font-size: var(--ui-font-size-#{$size})
+  
+
+$weights: (300, 400, 500, 600, 700, "lighter", "normal", "bold")
+@each $weight in $weights
+  .font-weight-#{$weight}
+    font-weight: #{$weight}
+
+
+$aligns: ("left", "center", "right")
+@each $align in $aligns
+  .text-#{$align}
+    text-align: #{$align} !important
+
+
+$transforms : ("lowercase", "uppercase", "capitalize")
+@each $transform in $transforms
+  .text-#{$transform}
+    text-transform: #{$transform} !important
+
+.text-break
+  word-break: break-word
+  word-wrap: break-word
+
+.text-truncate
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis

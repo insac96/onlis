@@ -1,0 +1,33 @@
+:root
+  //Background
+  --ui-background: 242, 248, 253
+  --ui-content: 255, 255, 255
+  --ui-child: 244, 247, 248
+  
+  //Text
+  --ui-text: 79, 102, 119
+
+  //Text Light Dark
+  --ui-text-light: var(--ui-light)
+  --ui-text-dark: var(--ui-dark)
+  --ui-text-dark-light: var(--ui-dark)
+  --ui-text-light-dark: var(--ui-light)
+
+  //Main Color
+  --ui-primary: 21, 111, 176
+  --ui-warn: 255, 187, 0
+  --ui-danger: 228, 39, 22
+  --ui-success: 78, 202, 20
+  --ui-dark: 47, 53, 69
+  --ui-light: 255, 255, 255
+
+  //Other COlor
+  --ui-gray: 201, 201, 201
+
+  //Disabled
+  --ui-disabled: 231, 231, 231
+
+$colors : ("primary", "dark", "light", "success", "warn", "danger")
+@each $color in $colors
+  .ui-color--#{$color}
+    --ui-color: var(--ui-#{$color})
