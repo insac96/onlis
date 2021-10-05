@@ -1,5 +1,5 @@
 import { ILayout } from 'onlis/types'
-import { isString, isNumber, returnPX } from '../../util'
+import { is_Number, returnPX } from '../../util'
 
 export default class Layout implements ILayout {
   public top = 0 // Navbar
@@ -11,7 +11,7 @@ export default class Layout implements ILayout {
   public right = 0 // Sidebar Right
 
   set (location, value) {
-    if(!isNumber(value)) return
+    if(!is_Number(value)) return
 
     this[location] = returnPX(value)
   }

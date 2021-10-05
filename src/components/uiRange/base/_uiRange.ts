@@ -2,7 +2,7 @@ import { VNode } from 'vue'
 import { Model, Component, Prop, Watch } from 'vue-property-decorator'
 import { uiComponentColor } from '../../../mixins/component'
 import uiProcess from '../../uiProcess/base/_uiProcess'
-import { isUndefined } from '../../../util'
+import { is_Undefined } from '../../../util'
 
 @Component
 export default class uiRange extends uiComponentColor {
@@ -26,7 +26,7 @@ export default class uiRange extends uiComponentColor {
   @Prop({ type: Boolean }) hideControl! : boolean
 
   get isValid () {
-    if(!!isUndefined(this.value)) return false
+    if(!!is_Undefined(this.value)) return false
     if(this.max < this.min) return false
 
     return true

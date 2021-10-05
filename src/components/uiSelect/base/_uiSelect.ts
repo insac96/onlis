@@ -2,7 +2,7 @@ import { VNode } from 'vue'
 import { Model, Component, Prop, Watch } from 'vue-property-decorator'
 import { uiComponentColor } from '../../../mixins/component'
 import { uiLoading, uiIconClose } from '../../../mixins/public'
-import { getColor, returnPX, insertBody, toLowerCase, isUndefined } from '../../../util'
+import { getColor, returnPX, insertBody, toLowerCase, is_Undefined } from '../../../util'
 import { ISelectOption } from 'onlis/types'
 
 @Component
@@ -187,7 +187,7 @@ export default class uiSelect extends uiComponentColor {
 
   // On Option Click
   onOptionSelect (id : number | string) {
-    if(!!isUndefined(this.value)) return
+    if(!!is_Undefined(this.value)) return
 
     const option : ISelectOption = this.getOptionByID(id)
     if(!option) return
@@ -248,8 +248,9 @@ export default class uiSelect extends uiComponentColor {
   // Render list Label if is Multiple
   get renderChips () {
     if(!this.isMultiple) return null
-    if(this.value.length < 1) return this.placeholder
 
+    if(this.value.length < 1) return this.placeholder
+    
     else return this.value.map((val : ISelectOption['value'], index : number) => {
       const option : ISelectOption = this.getOptionByValue(val)
 

@@ -55,7 +55,7 @@ export default class uiComponent extends Vue {
   // On Link Active
   onLink () {
     if (!!this.to) {
-      if(!this.$router) return false
+      if(!this.$router) return
       this.$router.push(this.to)
     } 
     else if (!!this.href) {

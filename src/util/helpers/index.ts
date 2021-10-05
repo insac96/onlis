@@ -9,26 +9,26 @@ function isObjectLike(value : any) : boolean {
   return typeof value === 'object' && value !== null
 }
 
-export const isBoolean = (value : any) : boolean => {
+export const is_Boolean = (value : any) : boolean => {
   return value === true 
   || value === false 
   || (isObjectLike(value) && getTag(value) == '[object Boolean]')
 }
 
-export const isFunction = (value : any) : boolean => {
+export const is_Function = (value : any) : boolean => {
   return typeof value === 'function'
 }
 
-export const isNull = (value : any) : boolean => {
+export const is_Null = (value : any) : boolean => {
   return value === null && value !== 0
 }
 
-export const isNumber = (value : any) : boolean => {
+export const is_Number = (value : any) : boolean => {
   return typeof value === 'number' 
   || (isObjectLike(value) && getTag(value) == '[object Number]')
 }
 
-export const isString = (value : any) : boolean => {
+export const is_String = (value : any) : boolean => {
   const type = typeof value
 
   return type === 'string' 
@@ -38,51 +38,52 @@ export const isString = (value : any) : boolean => {
   && getTag(value) == '[object String]')
 }
 
-export const isUndefined = (value : any) : boolean => {
+export const is_Undefined = (value : any) : boolean => {
   return value === undefined
 }
 
-export const isObject = (value : any) : boolean => {
+export const is_Object = (value : any) : boolean => {
   return typeof value === 'object' 
   && !Array.isArray(value) 
   && value !== null
 }
 
-export const isPercent = (value : any) : boolean => {
-  return !!isNumber(value) && (0 <= value && value <= 100)
+export const is_Percent = (value : any) : boolean => {
+  return !!is_Number(value) && (0 <= value && value <= 100)
 }
 
-export const isPxRemEm = (value : string) : boolean => {
-  return /px$|rem$|em$/i.test(value)
+export const is_Size = (value : string) : boolean => {
+  return /px$|rem$|em$|%$|vh$|vw$/i.test(value)
 }
 
 export const returnPX = (value : any) : string | null => {
-  if(!isNumber(value) && !isString(value)) return null
-
-  if(!!isNumber(value)){
+  if(!!is_Number(value)){
     return !isNaN(value) ?  `${value}px` : null
   }
-  else if (!!isString(value)){
-    return !isNaN(Number(value)) ? `${value}px` : (!!isPxRemEm(value) ? value : null)
+  else if (!!is_String(value)){
+    return !isNaN(Number(value)) ? `${value}px` : (!!is_Size(value) ? value : null)
+  }
+  else {
+    return null
   }
 }
 
 export const getObject = (value : any) : any => {
   if(!value) return undefined
-  if(!isObject(value) && !isFunction(value)) return
+  if(!is_Object(value) && !is_Function(value)) return
 
   let newValue
 
   // Check Type
-  if(!!isObject(value)){
+  if(!!is_Object(value)){
     newValue = value
   }
-  else if (!!isFunction(value)){
+  else if (!!is_Function(value)){
     newValue = value()
   }
 
   // Return
-  return !!isObject(newValue) ? newValue : undefined
+  return !!is_Object(newValue) ? newValue : undefined
 }
 
 export const toLowerCase = (text : string, replaceSpace? : string) : string => {

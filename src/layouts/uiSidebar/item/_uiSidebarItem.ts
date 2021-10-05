@@ -2,7 +2,7 @@ import { VNode } from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
 import { uiComponentColor } from '../../../mixins/component'
 import { uiLoading, uiIconArrow } from '../../../mixins/public'
-import { returnPX, getColor, isUndefined } from '../../../util'
+import { returnPX, getColor, is_Undefined } from '../../../util'
 
 @Component
 export default class uiSidebarItem extends uiComponentColor {
@@ -79,7 +79,7 @@ export default class uiSidebarItem extends uiComponentColor {
 
   // Is Pointer
   get isPointer() {
-    return !!this.$listeners.click || !!this.to || !!this.href || (!!this.parentRoot && !isUndefined(this.parentRoot.value))
+    return !!this.$listeners.click || !!this.to || !!this.href || (!!this.parentRoot && !is_Undefined(this.parentRoot.value))
   }
 
   // On Item Click
@@ -94,7 +94,7 @@ export default class uiSidebarItem extends uiComponentColor {
       if(!!this.to || !!this.href){
         this.onLink()
       }
-      else if(!isUndefined(this.parentRoot.value) && !!this.value){
+      else if(!is_Undefined(this.parentRoot.value) && !!this.value){
         this.parentRoot.$emit('model', this.value)
       }
 

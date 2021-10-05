@@ -2,7 +2,7 @@ import { VNode } from 'vue'
 import { Model, Component, Prop, Watch } from 'vue-property-decorator'
 import { uiComponentColor } from '../../../mixins/component'
 import { uiLoading } from '../../../mixins/public'
-import { returnPX , isPercent } from '../../../util'
+import { returnPX , is_Percent } from '../../../util'
 
 @Component
 export default class uiProcessCircle extends uiComponentColor {
@@ -25,7 +25,7 @@ export default class uiProcessCircle extends uiComponentColor {
 
   // Check Value is Valid
   get isValidValue () {
-    return (!!isPercent(this.value) && !!isPercent(this.maxPercent))
+    return (!!is_Percent(this.value) && !!is_Percent(this.maxPercent))
   }
 
   // Set SGV

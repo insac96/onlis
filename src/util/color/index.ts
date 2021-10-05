@@ -1,3 +1,5 @@
+import { is_String } from '../helpers'
+
 const hexToRGB = (hex : string) : any => {
   const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i
   
@@ -14,8 +16,9 @@ const hexToRGB = (hex : string) : any => {
   } : null
 }
 
-export const getColor = (color : any) : string | null => {
+export const getColor = (color : string) : string | null => {
   if(!color) return null
+  if(!is_String(color)) return null
   
   if(color === 'primary' 
   || color === 'danger' 

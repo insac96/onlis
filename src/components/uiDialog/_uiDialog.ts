@@ -60,7 +60,7 @@ export default class uiDialog extends uiComponentColor {
   // On Close
   onClose () {
     if(!!this.custom) return this.$emit('custom-close')
-    this.$emit('model', false)
+    else return this.$emit('model', false)
   }
 
   // Insert, Remove

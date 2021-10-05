@@ -1,5 +1,5 @@
 import { IConfigs, ITheme, IThemeConfigs } from 'onlis/types'
-import { isBoolean, isFunction, isString, isNumber, isObject, getColor, getObject, returnPX } from '../../util'
+import { is_Boolean, is_Object, getColor, getObject, returnPX } from '../../util'
 
 export default class Theme implements ITheme {
   public dark  = false
@@ -7,8 +7,34 @@ export default class Theme implements ITheme {
   public radius = null
 
   public colors = {
-    dark: {},
-    light: {}
+    dark: {
+      primary: null,
+      danger: null,
+      warn: null,
+      success: null,
+      dark: null,
+      light: null,
+      background: null,
+      content: null,
+      child: null,
+      text: null,
+      gray: null,
+      disabled: null,
+    },
+    light: {
+      primary: null,
+      danger: null,
+      warn: null,
+      success: null,
+      dark: null,
+      light: null,
+      background: null,
+      content: null,
+      child: null,
+      text: null,
+      gray: null,
+      disabled: null,
+    }
   }
 
   constructor(configs : IConfigs){
@@ -17,7 +43,7 @@ export default class Theme implements ITheme {
 
   // Dark
   setDark (dark) {
-    if(!isBoolean(dark)) return 
+    if(!is_Boolean(dark)) return 
 
     this.dark = dark
   }
@@ -28,8 +54,6 @@ export default class Theme implements ITheme {
 
   // Set Radius
   setRadius (radius) {
-    if(!isString(radius) && !isNumber(radius)) return
-
     this.radius = returnPX(radius)
   }
 
@@ -38,38 +62,45 @@ export default class Theme implements ITheme {
   }
 
   // Set Primary
-  setPrimary (color, mode?) {
+  setPrimary (color, mode) {
     this.setColor('primary', color, mode)
   }
 
-  resetPrimary (mode?) {
+  resetPrimary (mode) {
     this.resetColor('primary', mode)
   }
 
   // Set Color
-  setColor (prop, color, mode?) {
-    if(!prop || !color || !isString(color)) return
+  setColor (prop, color, mode) {
+    if(!prop || !color) return
 
-    let newColor = getColor(color)
+    const newColor = getColor(color)
+    if(!newColor) return
     
     if(!mode){
-      this.colors['light'][prop] = newColor
-      this.colors['dark'][prop] = newColor
+      this.colors.light[prop] = newColor
+      this.colors.dark[prop] = newColor
     }
-    else if(mode === 'dark' || mode === 'light'){
-      this.colors[mode][prop] = newColor
+    else if(mode === 'dark'){
+      this.colors.dark[prop] = newColor
+    }
+    else if(mode === 'light'){
+      this.colors.light[prop] = newColor
     }
   }
 
-  resetColor (prop, mode?) {
+  resetColor (prop, mode) {
     if(!prop) return
 
     if(!mode){
-      this.colors['light'][prop] = null
-      this.colors['dark'][prop] = null
+      this.colors.light[prop] = null
+      this.colors.dark[prop] = null
     }
-    else if(mode === 'dark' || mode === 'light'){
-      this.colors[mode][prop] = null
+    else if(mode === 'dark'){
+      this.colors.dark[prop] = null
+    }
+    else if(mode === 'light'){
+      this.colors.light[prop] = null
     }
   }
 
@@ -99,7 +130,8 @@ export default class Theme implements ITheme {
 
   // Init
   initColorsMode (modeColors, mode) {
-    if(!modeColors || !isObject(modeColors)) return
+    if(!modeColors) return
+    if(!is_Object(modeColors)) return
 
     for (const [key, value] of Object.entries(modeColors)) {
       this.setColor(key, value, mode)
@@ -107,7 +139,8 @@ export default class Theme implements ITheme {
   }
 
   initColors (colors) {
-    if(!colors || !isObject(colors)) return
+    if(!colors) return
+    if(!is_Object(colors)) return
 
     this.initColorsMode(colors.light, 'light')
     this.initColorsMode(colors.dark, 'dark')
@@ -116,10 +149,10 @@ export default class Theme implements ITheme {
   initTheme (theme) {
     const themeObject = getObject(theme)
 
-    if(!!themeObject){
-      this.setDark(themeObject.dark)
-      this.setRadius(themeObject.radius)
-      this.initColors(themeObject.colors)
-    }
+    if(!themeObject) return
+
+    this.setDark(themeObject.dark)
+    this.setRadius(themeObject.radius)
+    this.initColors(themeObject.colors)
   }
 }

@@ -51,7 +51,7 @@ export default class uiSelectOption extends uiComponentColor {
 
   // Is Active
   get isActive () {
-    if(!!this.isInvalid) return
+    if(!!this.isInvalid) return false
 
     if(Array.isArray(this.parent.value)){
       const array : any[] = this.parent.value

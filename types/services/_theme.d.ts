@@ -15,9 +15,9 @@ export interface IThemeColors {
   disabled? : string | null
 }
 
-export type IThemeConfigs = {
+export interface IThemeConfigs {
   dark? : boolean
-  radius? : string | number | null
+  radius? : string | null
   colors? : {
     dark?: IThemeColors
     light?: IThemeColors

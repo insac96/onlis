@@ -2,7 +2,7 @@ import { VNode } from 'vue'
 import { Model, Component, Prop } from 'vue-property-decorator'
 import { uiComponentColor } from '../../mixins/component'
 import { uiLoading, uiIconCheck } from '../../mixins/public'
-import { returnPX, isUndefined } from '../../util'
+import { returnPX, is_Undefined } from '../../util'
 
 @Component
 export default class uiCheckBox extends uiComponentColor {
@@ -22,15 +22,15 @@ export default class uiCheckBox extends uiComponentColor {
 
   // Get Checked
   get isChecked () {
-    if(!isUndefined(this.checked)) return this.checked
+    if(!is_Undefined(this.checked)) return this.checked
 
-    if(!!isUndefined(this.model)) return false
+    if(!!is_Undefined(this.model)) return false
 
     if(typeof this.model == 'boolean'){
       return this.model
     }
     else if(Array.isArray(this.model)){
-      if(!this.value) return
+      if(!this.value) false 
 
       const array : any[] = this.model
       let isValueInModel : boolean
@@ -56,11 +56,11 @@ export default class uiCheckBox extends uiComponentColor {
   }
 
   // Input
-  onInput (event: any) {
-    if(!isUndefined(this.checked)) return
+  onInput (event: any) : void {
+    if(!is_Undefined(this.checked)) return
 
     if(!!this.isLoading || !!this.isDisabled) return
-    if(!!isUndefined(this.model)) return
+    if(!!is_Undefined(this.model)) return
 
     if(typeof this.model == 'boolean'){
       this.$emit('model', !this.model)
@@ -97,9 +97,12 @@ export default class uiCheckBox extends uiComponentColor {
     else {
       if(!this.value) return
 
-      if(!this.model || this.model !== this.value) return this.$emit('model', this.value)
-
-      this.$emit('model', null) 
+      if(!this.model || this.model !== this.value) {
+        this.$emit('model', this.value)
+      }
+      else {
+        this.$emit('model', null) 
+      }
     }
 
     this.$emit('input', this.model)

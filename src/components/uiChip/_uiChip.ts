@@ -2,7 +2,7 @@ import { VNode } from 'vue'
 import { Component, Prop, Model } from 'vue-property-decorator'
 import { uiComponentColor } from '../../mixins/component'
 import { uiLoading, uiIconClose } from '../../mixins/public'
-import { returnPX, isUndefined } from '../../util'
+import { returnPX, is_Undefined } from '../../util'
 
 @Component
 export default class uiChip extends uiComponentColor {
@@ -34,7 +34,7 @@ export default class uiChip extends uiComponentColor {
     this.startRipple(event, this.$el as HTMLElement)
 
     setTimeout(() => {
-      if(!!isUndefined(this.value)){
+      if(!!is_Undefined(this.value)){
         this.isShow = false
       }
       else {
@@ -93,7 +93,7 @@ export default class uiChip extends uiComponentColor {
       directives: [
         {
           name: 'show',
-          value: !isUndefined(this.value) ? this.value : this.isShow
+          value: !is_Undefined(this.value) ? this.value : this.isShow
         }
       ]
     }, [
