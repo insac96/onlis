@@ -1,0 +1,31 @@
+//Root
+.ui-avatar
+  --ui-avatar-size: var(--ui-size)
+  --ui-avatar-img-size: 100%
+
+  .ui-loading-root
+    --ui-loading-size: calc(var(--ui-avatar-size) * 0.6)
+
+.ui-avatar
+  align-items: center
+  justify-content: center
+  width: var(--ui-avatar-size)
+  height: var(--ui-avatar-size)
+  max-width: var(--ui-avatar-size)
+  max-height: var(--ui-avatar-size)
+  border-radius: var(--ui-radius)
+  line-height: normal
+  user-select: none
+  overflow: hidden
+
+  &--circle
+    border-radius: 50% !important
+
+  img
+    width: var(--ui-avatar-img-size)
+    height: var(--ui-avatar-img-size)
+    max-width: var(--ui-avatar-size)
+    max-height: var(--ui-avatar-size)
+    border-radius: inherit
+    transition: all .25s ease
+    
