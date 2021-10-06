@@ -20,5 +20,5 @@ export interface IServices {
   breakpoint? : IBreakpoint
   theme? : ITheme
   device? : IDevice,
-  isHydrationRender: boolean
+  isHydrationRender?: boolean
 }

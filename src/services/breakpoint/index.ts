@@ -4,13 +4,13 @@ import { IBreakpoint } from '../../../types'
 export default class Breakpoint implements IBreakpoint {
   private resizeTimeout = 0
 
-  public isMobile = false
+  public isMobile = true // SSR = true
 
   public isTablet = false
 
   public isDesktop = false
 
-  public xs = false // Mobile
+  public xs = true // Mobile - SSR = true
 
   public sm = false // Tablet
 
@@ -27,14 +27,10 @@ export default class Breakpoint implements IBreakpoint {
     lg: 1904
   }
 
-  constructor () {
-    this.update()
-  }
-
   public init () {
     this.update()
 
-    if (typeof window === 'undefined') return // SSR
+    if (typeof window === 'undefined') return 
     window.addEventListener('resize', this.onResize.bind(this), { passive: true })
   }
 
@@ -58,8 +54,6 @@ export default class Breakpoint implements IBreakpoint {
   }
 
   private getClientWidth () {
-    if (typeof window === 'undefined') return 0 // SSR (Mobile = xs = true)
-
     return Math.max(
       document.documentElement!.clientWidth,
       window.innerWidth || 0
