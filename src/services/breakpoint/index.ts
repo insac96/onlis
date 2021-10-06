@@ -1,6 +1,5 @@
 import { IBreakpoint } from '../../../types'
 
-
 export default class Breakpoint implements IBreakpoint {
   private resizeTimeout = 0
 

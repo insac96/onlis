@@ -5,14 +5,14 @@ import { IDevice, IDeviceConfig } from '../services/_device'
 import { IBreakpoint } from '../services/_breakpoint'
 
 export interface IServicesConfigs {
-  device : IDeviceConfig
+  device? : IDeviceConfig
 }
 
 export interface IConfigs {
   theme? : IThemeConfigs,
   components? : string[] | null
   directives? : string[] | null
-  services? : IServicesConfigs
+  device? : IDeviceConfig
 }
 
 export interface IServices {

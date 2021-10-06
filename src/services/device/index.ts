@@ -47,11 +47,11 @@ export default class Device implements IDevice {
   }
 
   private update () {
-    if (typeof navigator !== 'undefined') {
-      this.userAgent = navigator.userAgent
-    }
-    else if (!!this.ctxHeaders && this.ctxHeaders['user-agent']) {
+    if (!!this.ctxHeaders && this.ctxHeaders['user-agent']) {
       this.userAgent = this.ctxHeaders['user-agent']
+    }
+    else if (typeof navigator !== 'undefined') {
+      this.userAgent = navigator.userAgent
     }
     else {
       this.userAgent = this.defaultUserAgent
@@ -121,19 +121,18 @@ export default class Device implements IDevice {
   }
 
   private initConfig (deviceConfig : IDeviceConfig) {
-    const configs = getObject(deviceConfig)
-    if(!configs) return
+    if(!deviceConfig) return
 
-    if(!is_Undefined(configs.resize) && !!is_Boolean(configs.resize)){
-      this.resize = configs.resize
+    if(!is_Undefined(deviceConfig.resize) && !!is_Boolean(deviceConfig.resize)){
+      this.resize = deviceConfig.resize
     }
 
-    if(!!(configs.defaultUserAgent) && !!is_String(configs.defaultUserAgent)){
+    if(!!(deviceConfig.defaultUserAgent) && !!is_String(deviceConfig.defaultUserAgent)){
       this.defaultUserAgent = deviceConfig.defaultUserAgent
     }
 
-    if(!!(configs.ctxHeaders)){
-      this.ctxHeaders = configs.ctxHeaders
+    if(!!(deviceConfig.ctxHeaders)){
+      this.ctxHeaders = deviceConfig.ctxHeaders
     }
   }
 }

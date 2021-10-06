@@ -30,10 +30,8 @@ export default class Framework {
 
   static initServices = (Vue : VueConstructor, options : IConfigs, ctx? : any) => {
     const configs : IConfigs = {
-      services: {
-        device: {
-          ctxHeaders: null
-        }
+      device: {
+        ctxHeaders: null
       },
       ...options
     }
@@ -41,19 +39,23 @@ export default class Framework {
     // Set **ctxHeaders** of Device Service
     if(!!ctx) {
       if (typeof ctx.req !== 'undefined') {
-        configs.services.device.ctxHeaders = ctx.req.headers
+        configs.device.ctxHeaders = ctx.req.headers
       }
     }
     else {
-      delete configs.services.device.ctxHeaders
+      delete configs.device.ctxHeaders
     }
 
     // Create Services
     const services : IServices = {
       layout: Vue.observable(new Services.Layout()),
+
       breakpoint: Vue.observable(new Services.Breakpoint()),
+
       theme: Vue.observable(new Services.Theme(configs.theme)),
-      device: Vue.observable(new Services.Device(configs.services.device)),
+
+      device: Vue.observable(new Services.Device(configs.device)),
+      
       isHydrationRender: true
     }
 
