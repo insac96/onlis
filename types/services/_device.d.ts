@@ -16,12 +16,9 @@ export interface IDevice {
   isSafari : boolean
 
   isCrawler : boolean
-
-  initResize () : void
 }
 
 export interface IDeviceConfig {
   resize? : boolean
   defaultUserAgent? : string
-  ctxHeaders? : string
 }

@@ -5,13 +5,15 @@ import Onlis, {
 } from 'onlis/lib'
 
 // Init Components
-<%= options.components.reduce((run, component) => (run += `Vue.use(${component});\n` ), '') %>
+<%= options.components.reduce((run, component) => (run += `Vue.use(${component})\n` ), '') %>
 
 // Init Directives
-<%= options.directives.reduce((run, directive) => (run += `Vue.directive('${directive}', ${directive});\n` ), '') %>
+<%= options.directives.reduce((run, directive) => (run += `Vue.directive('${directive}', ${directive})\n` ), '') %>
 
-// Init Mixin
-Onlis.initMixin(Vue)
+// SSR Service Update
+<% if (options.isSSR === true) { %>
+Onlis.ssrServiceUpdate(Vue)
+<% } %>
 
 // Init Services
 export default async function (ctx, inject) {

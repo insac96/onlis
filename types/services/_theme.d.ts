@@ -41,9 +41,6 @@ export interface ITheme {
   setColor (prop : IThemeColorProp, color : string, mode? : string) : void
   resetColor (prop : IThemeColorProp, mode? : string) : void
 
-  save () : void
-  load () : void
-
   initColorsMode (modeColors: IThemeColors, mode? : string) : void
   initColors (colors: IThemeConfigs.colors)
 

@@ -14,6 +14,14 @@ module.exports = function (moduleOptions = {}) {
     // Push CSS
     this.options.css.push('onlis/dist/onlis.min.css')
 
+    // SSR
+    if(this.options.ssr === true || this.options.mode === 'universal'){
+      options.isSSR = true
+    }
+    else {
+      options.isSSR = false
+    }
+
     // TreeShake
     if(!!options.treeShake){
       rootPlugin = 'plugin.lib.js'

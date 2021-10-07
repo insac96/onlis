@@ -18,6 +18,7 @@ export interface IBreakpoint {
   xl : boolean
   thresholds : IBreakpointThresholds
 
-  update () : void
+  updateFromDevice (device : any) : void
+
   init () : void
 }

@@ -4,15 +4,13 @@ import { ITheme, IThemeConfigs } from '../services/_theme'
 import { IDevice, IDeviceConfig } from '../services/_device'
 import { IBreakpoint } from '../services/_breakpoint'
 
-export interface IServicesConfigs {
-  device? : IDeviceConfig
-}
-
 export interface IConfigs {
   theme? : IThemeConfigs,
   components? : string[] | null
   directives? : string[] | null
-  device? : IDeviceConfig
+  device? : IDeviceConfig,
+  isSSR? : boolean,
+  headers? : any
 }
 
 export interface IServices {
@@ -20,5 +18,5 @@ export interface IServices {
   breakpoint? : IBreakpoint
   theme? : ITheme
   device? : IDevice,
-  isHydrationRender?: boolean
+  isHydrationRender?: boolean | string
 }

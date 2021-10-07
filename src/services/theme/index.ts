@@ -1,4 +1,4 @@
-import { ITheme, IThemeConfigs } from '../../../types'
+import { IConfigs, ITheme, IThemeConfigs } from '../../../types'
 import { is_Boolean, is_Object, getColor, getObject, returnPX } from '../../util'
 
 export default class Theme implements ITheme {
@@ -37,41 +37,41 @@ export default class Theme implements ITheme {
     }
   }
 
-  constructor(themeConfigs : IThemeConfigs){
-    this.initTheme(themeConfigs)
+  constructor(configs : IConfigs){
+    this.initTheme(configs.theme as IThemeConfigs)
   }
 
   // Dark
-  setDark (dark) {
+  public setDark (dark) {
     if(!is_Boolean(dark)) return 
 
     this.dark = dark
   }
 
-  toggleDark () {
+  public toggleDark () {
     this.dark = !this.dark
   }
 
   // Set Radius
-  setRadius (radius) {
+  public setRadius (radius) {
     this.radius = returnPX(radius)
   }
 
-  resetRadius () {
+  public resetRadius () {
     this.radius = null
   }
 
   // Set Primary
-  setPrimary (color, mode) {
+  public setPrimary (color, mode) {
     this.setColor('primary', color, mode)
   }
 
-  resetPrimary (mode) {
+  public resetPrimary (mode) {
     this.resetColor('primary', mode)
   }
 
   // Set Color
-  setColor (prop, color, mode) {
+  public setColor (prop, color, mode) {
     if(!prop || !color) return
 
     const newColor = getColor(color)
@@ -89,7 +89,7 @@ export default class Theme implements ITheme {
     }
   }
 
-  resetColor (prop, mode) {
+  public resetColor (prop, mode) {
     if(!prop) return
 
     if(!mode){
@@ -105,7 +105,7 @@ export default class Theme implements ITheme {
   }
 
   // Save and Load LocalStorage
-  save () {
+  public save () {
     if (typeof window === 'undefined') return // SSR
     if (typeof localStorage === 'undefined') return
 
@@ -116,7 +116,7 @@ export default class Theme implements ITheme {
     }))
   }
 
-  load () {
+  public load () {
     if (typeof window === 'undefined') return
     if (typeof localStorage === 'undefined') return
 
@@ -129,7 +129,7 @@ export default class Theme implements ITheme {
   }
 
   // Init
-  initColorsMode (modeColors, mode) {
+  public initColorsMode (modeColors, mode) {
     if(!modeColors) return
     if(!is_Object(modeColors)) return
 
@@ -138,7 +138,7 @@ export default class Theme implements ITheme {
     }
   }
 
-  initColors (colors) {
+  public initColors (colors) {
     if(!colors) return
     if(!is_Object(colors)) return
 
@@ -146,7 +146,7 @@ export default class Theme implements ITheme {
     this.initColorsMode(colors.dark, 'dark')
   }
 
-  initTheme (theme) {
+  public initTheme (theme) {
     const themeObject = getObject(theme)
 
     if(!themeObject) return
