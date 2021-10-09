@@ -1,23 +1,36 @@
-import Vue, { VNode } from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
+import { VNode } from 'vue'
+import { Component, Prop , Model } from 'vue-property-decorator'
+import { uiComponentColor } from '../../../mixins/component'
 import { returnPX } from '../../../util'
 
 @Component
-export default class uiList extends Vue {
-  static install: (vue: any) => any
+export default class uiList extends uiComponentColor {
 
-  @Prop({ type: Boolean }) space! : boolean
+  componentName: string = 'list'
 
-  @Prop({ type: Boolean }) dense! : boolean
+  @Model('model') readonly value!: any
+
+  @Prop() maxHeight! : any
   
   public render(h: any): VNode {
     return h('div', {
       staticClass: 'ui-list',
       class: [
-        'ui-component--flex',
+        'ui-component',
+        'd-flex',
+        'flex-column',
+        'overflow-y',
         {
-          'ui-list--space': !!this.space,
-          'ui-list--dense': !!this.space && !!this.dense
+          'ui-component--border': !!this.border,
+          'ui-component-fashion--basic': !this.fashion && this.fashion !== 'full',
+          'ui-component-fashion--full': this.fashion === 'full',
+        },
+        this.classColor,
+      ],
+      style: [
+        this.styleColor,
+        {
+          '--ui-list-max-height': returnPX(this.maxHeight)
         }
       ]
     }, [

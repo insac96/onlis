@@ -5,45 +5,16 @@
   
 // Main
 .ui-checkbox-root
-  position: relative
-  align-items: center
-
   // Hidden Input
   .ui-checkbox-input
     width: 0
     height: 0
-    position: absolute
     left: 0
     top: 0
     z-index: -1
-    visibility: hidden
-    user-select: none
 
-  // Label
-  .ui-checkbox-label
-    cursor: pointer
-    &--right
-      order: 3
-      margin-left: 6px
-      &.ui-checkbox-label--space
-        margin-left: auto
-    &--left
-      order: 1
-      margin-right: 6px
-      &.ui-checkbox-label--space
-        margin-right: auto
-
-  // Main CheckBox
+  // CheckBox
   .ui-checkbox
-    display: flex
-    align-items: center
-    justify-content: center
-    border-radius: var(--ui-radius)
-    overflow: hidden
-    order: 2
-    cursor: pointer
-    user-select: none
-
     // Icon Check
     .ui-icon-check
       --ui-icon-check: var(--ui-component-text)
@@ -64,16 +35,11 @@
       height: var(--ui-checkbox-size)
 
       .ui-switch-text
-        display: flex
-        align-items: center
         height: var(--ui-checkbox-size)
         max-height: var(--ui-checkbox-size)
         margin-right: calc(var(--ui-space) / 2)
         margin-left: calc(var(--ui-checkbox-size) + 1.5px)
-        font-size: var(--ui-font-size-xs)
-        font-weight: 600
         color: rgb(var(--ui-switch-color))
-        user-select: none
 
       .ui-switch-icon
         position: absolute
@@ -85,7 +51,6 @@
         background: rgb(var(--ui-switch-color))
         border-radius: inherit
         transition: all 0.25s cubic-bezier(0.2, 0.7, 0.2, 1.5)
-        //z-index: 1
 
       &.ui-checkbox--checked
         --ui-switch-color: var(--ui-component-text)
@@ -96,7 +61,3 @@
         .ui-switch-icon
           left: calc(100% - (var(--ui-checkbox-size) - 6px) - 3px)
           transform: translateY(-50%) scale(1)
-
-
-
-    

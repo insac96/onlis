@@ -24,12 +24,22 @@ export default class uiAlert extends uiComponentColor {
   }
   
   public render(h: any): VNode {
-    // Left
+    // Icon Left
     const icon = h('div', {
-      staticClass: 'ui-alert__left__icon',
-      class: {
-        'ui-component--pointer': !!this.$listeners.icon
-      },
+      staticClass: 'ui-alert__icon',
+      class: [
+        'd-flex',
+        'align-center',
+        'justify-center',
+        'ra', 
+        'mr-2',
+        'line-normal',
+        'transition',
+        'user-none',
+        {
+          'cursor-pointer': !!this.$listeners.icon
+        }
+      ],
       on: {
         click: (event : any) => {
           if(!this.$listeners.icon) return
@@ -41,35 +51,60 @@ export default class uiAlert extends uiComponentColor {
       this.$slots.icon
     ])
 
+    // Left
     const left = h('div', {
-      staticClass: 'ui-alert__left'
+      staticClass: 'ui-alert__left',
+      class: ['mr-2']
     }, [
-      !!this.$slots.icon ? icon : this.$slots.left
+      this.$slots.left
     ])
 
-    // Content
+    // Content Title
     const title = h('div', {
-      staticClass: 'ui-alert__content__title'
+      staticClass: 'ui-alert__title',
+      class: [
+        'user-none',
+        'line-normal',
+        'font-weight-700',
+        'transition'
+      ]
     }, [
       this.$slots.title
     ])
 
+    // Content Body
     const body = h('div', {
-      staticClass: 'ui-alert__content__body'
+      staticClass: 'ui-alert__body',
+      class: [
+        'font-size-s',
+        'transition',
+        'position-relative',
+        'transition'
+      ]
     }, [
       this.$slots.default
     ])
 
+    // Content
     const content = h('div', {
-      staticClass: 'ui-alert__content'
+      class: [
+        'd-flex',
+        'flex-column',
+        'grow-1',
+        'mx-auto',
+      ]
     }, [
       !!this.$slots.title && title,
       !!this.$slots.default && body
     ])
 
-    //Right
+    // Right
     const right = h('div', {
       staticClass: 'ui-alert__right',
+      class: [ 
+        'ml-2', 
+        'position-relative'
+      ]
     }, [
       !!this.isLoading ? h(uiLoading) : this.$slots.right
     ])
@@ -77,18 +112,17 @@ export default class uiAlert extends uiComponentColor {
     // Alert
     const alert = h('div', {
       staticClass: 'ui-alert',
-
       class: [
-        { 
-          'ui-alert--center': !!this.center 
-        },
         'ui-component',
-        'ui-component--flex',
+        'd-flex',
+        'justify-space-between',
+        {
+          'align-center': !!this.center
+        },
         this.classStatus,
         this.classFashion,
         this.classColor
       ],
-
       style: [
         this.styleColor,
         { 
@@ -96,23 +130,20 @@ export default class uiAlert extends uiComponentColor {
           '--ui-alert-icon-size': returnPX(this.iconSize)
         }
       ],
-
+      attrs: this.$attrs,
+      on: {
+        ...this.$listeners,
+        click : this.onClick
+      },
       directives: [
         {
           name: 'show',
           value: !!this.value
         }
-      ],
-
-      attrs: this.$attrs,
-
-      on: {
-        ...this.$listeners,
-
-        click : this.onClick
-      }
+      ]
     }, [
-      (!!this.$slots.left || !!this.$slots.icon) && left,
+      !!this.$slots.icon && icon,
+      !!this.$slots.left && !this.$slots.icon && left,
       content,
       (!!this.$slots.right || !!this.isLoading) && right
     ])

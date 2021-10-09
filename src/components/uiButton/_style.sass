@@ -4,37 +4,19 @@
 
 // Main
 .ui-button
-  align-items: center
-  justify-content: center
   width: var(--ui-button-width)
   height: var(--ui-component-size)
+  font-size: var(--ui-component-font-size)
   border-radius: var(--ui-radius)
   padding: 0 var(--ui-space)
-  font-weight: 700
-  text-transform: uppercase
-  line-height: normal
-  user-select: none
+  font-weight: 500
 
   .ui-loading-root
     --ui-loading-size: calc(var(--ui-component-size) * 0.6)
 
-  // Block
-  &--block
-    width: 100%
-
-  // Circle
-  &--circle
-    border-radius: 50% !important
-
-  // Icon
   &--icon
     padding: 0 !important
     min-width: var(--ui-component-size)
     max-width: var(--ui-component-size)
     min-height: var(--ui-component-size)
     max-height: var(--ui-component-size)
-    *
-      margin: 0
-    
-
-    

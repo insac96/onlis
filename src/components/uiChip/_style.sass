@@ -4,14 +4,11 @@
 
 // Main
 .ui-chip
-  align-items: center
-  justify-content: center
   width: var(--ui-chip-width)
   height: var(--ui-component-size)
+  font-size: var(--ui-component-font-size)
   border-radius: var(--ui-radius)
   padding: 0 var(--ui-space)
-  line-height: normal
-  user-select: none
 
   // Content 
   .ui-icon-close
@@ -20,12 +17,10 @@
     
   .ui-loading-root
     --ui-loading-background: ''
-    --ui-loading-size: calc((var(--ui-component-size) - var(--ui-space)) * 0.8)
+    --ui-loading-size: var(--ui-component-font-size)
 
-  &__right
-    position: relative
-    display: flex
-    align-items: center
-    justify-content: center
-    margin-left: calc(var(--ui-space) * 0.5)
+  .ui-chip__right
+    min-width: var(--ui-component-font-size)
+    min-height: var(--ui-component-font-size)
+  
 

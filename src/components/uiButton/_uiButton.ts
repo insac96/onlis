@@ -15,8 +15,6 @@ export default class uiButton extends uiComponentColor {
 
   @Prop({ type: Boolean }) icon! : boolean
 
-  @Prop({ type: Boolean }) circle! : boolean
-
   @Prop({ type: Boolean }) block! : boolean
 
   onClick (event : any) {
@@ -31,13 +29,18 @@ export default class uiButton extends uiComponentColor {
       class: [
         'ui-component',
         {
-          'ui-button--icon': !!this.icon,
-          'ui-button--circle': !!this.circle,
-          'ui-button--block': !!this.block
+          'd-inline-flex': !this.block,
+          'd-flex': !!this.block,
+          'full-width': !!this.block
         },
+        [
+          'align-center',
+          'justify-center',
+          'line-normal',
+          'user-none'
+        ],
         {
-          'ui-component--inline-flex': !this.block,
-          'ui-component--flex': !!this.block,
+          'ui-button--icon': !!this.icon
         },
         {
           'ui-component--size--m': !this.size,
@@ -60,7 +63,6 @@ export default class uiButton extends uiComponentColor {
       },
       on: {
         ...this.$listeners,
-        
         click: this.onClick
       }
     }, [

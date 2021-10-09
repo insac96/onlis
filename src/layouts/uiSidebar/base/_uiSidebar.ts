@@ -17,11 +17,13 @@ export default class uiSidebar extends uiComponentColor {
 
   @Prop({ type: Boolean }) layout! : boolean
 
-  @Prop({ type: Boolean }) open! : boolean
+  @Prop({ type: Boolean, default: true }) open! : boolean
 
   @Prop({ type: Boolean }) absolute! : boolean
 
   @Prop({ type: Boolean }) right! : boolean
+
+  @Prop({ type: Boolean }) square!: boolean
   
   @Prop({ type: Number, default: 250 }) width! : number
 
@@ -31,42 +33,53 @@ export default class uiSidebar extends uiComponentColor {
 
   @Prop({ type: Boolean }) autoScroll! : boolean 
 
-  // Is Desktop
-  get isDesktop () {
-    return !!this.$onlis.breakpoint.isDesktop
+  // Get Position
+  get position () {
+    return !!this.right ? 'right' : 'left'
   }
 
-  // Is Layout
-  get isLayout () {
-    return !!this.layout
+  // Is Layout Desktop
+  get isLayoutDesktop () {
+    return !!this.layout && !!this.$onlis.breakpoint.isDesktop
   }
 
-  // Layout Service
+  // Layout Position
   get layoutService () {
     return this.$onlis.layout
   }
 
+  get height () {
+    if(!this.isLayoutDesktop) return '100%'
+
+    const clippedLeft = this.layoutService.clippedTopLeft
+    const clippedRight = this.layoutService.clippedTopRight
+
+    if((!clippedLeft && !this.right) || (!clippedRight && !!this.right)) {
+      return `calc(100% - ${this.layoutService.top}px)`
+    }
+    else {
+      return '100%'
+    }
+  }
+
   // Set Layout
   setLayout () {
-    if(!this.isLayout) return
-    if(!this.isDesktop) return
+    if(this.width <= 0) return
+    if(!this.isLayoutDesktop) return
 
-    const position = !!this.right ? 'right' : 'left'
-    this.layoutService.set(position, this.width)
+    this.layoutService.set(this.position, this.width)
   }
 
   // Remove Layout
   removeLayout () {
-    if(!this.isLayout) return
+    if(!this.layout) return
 
-    const position = !!this.right ? 'right' : 'left'
-    this.layoutService.remove(position)
+    this.layoutService.remove(this.position)
   }
 
-  // Auto Open when is Desktop
+  // Auto Show if Layout = true and is Desktop
   autoShow () {
-    if(!this.isLayout) return
-    if(!this.isDesktop) return
+    if(!this.isLayoutDesktop) return
 
     if(!this.open){
       this.$emit('update:open', true)
@@ -76,28 +89,12 @@ export default class uiSidebar extends uiComponentColor {
     }
   }
 
-  // Auto Hide when is Mobile or Tablet
+  // Auto Hide if Layout = true and isn't Desktop
   autoHide () {
-    if(!this.isLayout) return
+    if(!!this.isLayoutDesktop) return
 
     if(!!this.open){
       this.$emit('update:open', false)
-    }
-  }
-
-  // Set Layout when Create
-  created () {
-    this.autoShow()
-  }
-
-  // Watch Desktop
-  @Watch('isDesktop')
-  onDesktopChange(val : boolean) {
-    if(!!val){
-      this.autoShow()
-    }
-    else {
-      this.autoHide()
     }
   }
 
@@ -106,13 +103,14 @@ export default class uiSidebar extends uiComponentColor {
     if(!this.open) return
     if(!!this.preventClose) return
 
-    // Disabled When is Layout and Desktop Size
-    if(!!this.isLayout && !!this.isDesktop) return
+    // Disabled When is Layout and Desktop
+    if(!!this.isLayoutDesktop) return
     
+    // Update
     this.$emit('update:open', false)
   }
 
-  // Insert
+  // Insert to Parent
   insertSidebar () {
     if(!!this.absolute) return
 
@@ -121,9 +119,11 @@ export default class uiSidebar extends uiComponentColor {
     })
   }
 
-  // Remove
-  beforeDestroy () {
+  // Remove in Parent
+  removeSidebar () {
     if(!!this.absolute) return
+
+    this.removeLayout()
 
     if (this.$el && this.$el.parentNode) {
       this.$el.parentNode.removeChild(this.$el)
@@ -133,40 +133,77 @@ export default class uiSidebar extends uiComponentColor {
   // Show
   show () {
     this.insertSidebar()
+    this.$nextTick(() => this.$emit('show'))
 
     this.setLayout()
-
-    this.$nextTick(() => this.$emit('open'))
   }
 
-  // Hide 
   hide () {
-    this.removeLayout()
+    this.$nextTick(() => this.$emit('hide'))
 
-    this.$emit('close')
+    this.removeLayout()
   }
 
-  // Check Value
+  // Check Open
   @Watch('open')
-  onValueChange(val: boolean) {
-    if (!!val) return this.show()
-    this.hide()
+  onOpenChange(val: boolean) {
+    if (!!val) { 
+      this.show()
+    }
+    else {
+      this.hide()
+    }
+  }
+
+  // Watch Layout
+  @Watch('isLayoutDesktop')
+  onDesktopChange(val : boolean) {
+    if(!!val){
+      this.autoShow()
+    }
+    else {
+      this.autoHide()
+    }
+  }
+
+  @Watch('width')
+  @Watch('right')
+  onPositionChange(){
+    this.setLayout()
+  }
+
+  // Set Layout when Created
+  created() {
+    this.autoShow()
+  }
+
+  // Insert Sidebar if *open* initial is True
+  mounted() {
+    if(!!this.open) return this.insertSidebar()
+  }
+
+  // Remove Sidebar in Parent
+  beforeDestroy () {
+    this.removeSidebar()
   }
 
   // Render
   public render(h: any): VNode {
-    const logo = h('div', {
-      staticClass: 'ui-sidebar__logo'
+    const header = h('div', {
+      staticClass: 'ui-sidebar__header'
     }, [
-      this.$slots.logo
+      this.$slots.header
     ])
 
     const body = h('div', {
       staticClass: 'ui-scroll',
       ref: 'body',
-      class: {
-        'ui-scroll--right': !!this.right
-      }
+      class: [
+        'grow-1',
+        {
+          'ui-scroll--right': !!this.right
+        }
+      ]
     }, [
       h('div', {
         staticClass: 'ui-sidebar__body',
@@ -188,21 +225,23 @@ export default class uiSidebar extends uiComponentColor {
       staticClass: 'ui-sidebar',
       class: [
         'ui-component',
-        'ui-component--flex',
+        'd-flex',
+        'flex-column',
         {
-          'ui-component-fashion--basic': !this.fashion || this.fashion !== 'full',
-          'ui-component-fashion--full': this.fashion === 'full',
-        },
-        {
+          'ui-sidebar--layout': !!this.isLayoutDesktop,
           'ui-sidebar--left': !this.right,
           'ui-sidebar--right': !!this.right,
+          'ui-sidebar--square': !!this.square,
+          'ui-sidebar--noRadiusTop': !!this.isLayoutDesktop && this.layoutService.top > 0,
         },
+        this.classFashion,
         this.classColor
       ],
       style: [
         this.styleColor,
         {
-          '--ui-sidebar-width': returnPX(this.width)
+          '--ui-sidebar-width': returnPX(this.width),
+          '--ui-sidebar-height': this.height
         }
       ],
       directives: [
@@ -216,7 +255,7 @@ export default class uiSidebar extends uiComponentColor {
         }
       ]
     }, [
-      !!this.$slots.logo && logo,
+      !!this.$slots.header && header,
       body,
       !!this.$slots.footer && footer
     ])

@@ -1,0 +1,33 @@
+// Main
+.ui-navbar
+  width: var(--ui-navbar-width)
+  height: var(--ui-navbar-height)
+  max-height: var(--ui-navbar-height)
+  border-bottom-left-radius: var(--ui-radius)
+  border-bottom-right-radius: var(--ui-radius)
+  box-shadow: 0px 3px 10px rgba(0,0,0, 0.05)
+  
+  &--sticky
+    position: sticky !important
+    top: 0
+    z-index: 500 !important
+
+  &--layout
+    position: fixed !important
+    top: 0
+    left: var(--ui-navbar-left)
+    right: var(--ui-navbar-right)
+    z-index: 100000 !important
+
+  &--hidden
+    transform: translate(0, -100%)
+
+  &__icon
+    --ui-component-text: inherit !important
+
+  &__logo
+    &--center
+      position: absolute
+      top: 50%
+      left: 50%
+      transform: translate(-50%, -50%)

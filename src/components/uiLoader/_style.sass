@@ -1,3 +1,4 @@
+// Dark
 .ui-app[dark=true]
   .ui-loader
     --ui-loader-background: 42, 42, 44
@@ -12,16 +13,12 @@
 
 // Main
 .ui-loader
-  position: relative
   background-color: rgba(var(--ui-loader-background), 0.6)
   border-radius: var(--ui-radius)
-  box-shadow: var(--ui-box-shadow)
   min-width: var(--ui-loader-width)
   min-height: var(--ui-loader-height)
   max-width: var(--ui-loader-width)
   max-height: var(--ui-loader-height)
-  transition: all .25s ease
-  overflow: hidden
 
   &::after
     content: ''
@@ -34,26 +31,32 @@
     background-image: linear-gradient(90deg,rgba(var(--ui-loader-background-after), 0) 0,rgba(var(--ui-loader-background-after), 0.2) 20%,rgba(var(--ui-loader-background-after), 0.5) 60%,rgba(var(--ui-loader-background-after), 0))
     animation: loader-effect 1.5s infinite
 
-  &--circle
-    border-radius: 50% !important
-
-  &--card
-    display: flex
+  &--alert
+    display: flex !important
     --ui-loader-width: 100%
-    --ui-loader-height: 200px
-
-  &--title
-    display: flex
-    --ui-loader-width: 200px
-    --ui-loader-height: 27px
-
-  &--button
-    --ui-loader-width: 120px
-    --ui-loader-height: var(--ui-size)
+    --ui-loader-height: 65px
 
   &--avatar
     --ui-loader-width: var(--ui-size)
     --ui-loader-height: var(--ui-size)
+
+  &--button
+    --ui-loader-width: calc(var(--ui-size) * 2)
+    --ui-loader-height: var(--ui-size)
+
+  &--card
+    display: flex !important
+    --ui-loader-width: 100%
+    --ui-loader-height: 200px
+
+  &--chip
+    --ui-loader-width: calc(var(--ui-size-mini) * 2.5)
+    --ui-loader-height: var(--ui-size-mini)
+
+  &--title
+    display: flex !important
+    --ui-loader-width: 200px
+    --ui-loader-height: 27px
 
   &--checkbox
     --ui-loader-width: 23px
@@ -63,15 +66,10 @@
     --ui-loader-width: 46px
     --ui-loader-height: 23px
 
-  &--alert
-    display: flex
+  &--input, &--select
+    display: flex !important
     --ui-loader-width: 100%
-    --ui-loader-height: 65px
-
-  &--input
-    display: flex
-    --ui-loader-width: 100%
-    --ui-loader-height: var(--ui-size)
+    --ui-loader-height: var(--ui-size-l)
 
 @keyframes loader-effect
   100%

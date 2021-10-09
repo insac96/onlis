@@ -1,6 +1,6 @@
 import Vue, { VNode } from 'vue'
 import { Component, Prop, Watch, Model } from 'vue-property-decorator'
-import { returnPX, insertBody } from '../../util'
+import { is_Undefined, returnPX, insertBody } from '../../util'
 import uiClickOutside from '../../directives/clickOutside'
 
 @Component({
@@ -11,13 +11,13 @@ import uiClickOutside from '../../directives/clickOutside'
 export default class uiMain extends Vue {
   static install: (vue: any) => void
 
-  @Model('model', { type: Boolean, default: null }) readonly value!: boolean | null
+  @Model('model', { type: Boolean, default: undefined }) readonly value!: boolean | null
+
+  @Prop({ type: Boolean }) block! : boolean
 
   @Prop({ default: null }) width! : any
 
   @Prop({ default: null }) maxHeight! : any
-
-  @Prop({ type: Boolean }) block! : boolean
 
   @Prop({ type: Boolean }) fixed! : boolean
 
@@ -43,18 +43,21 @@ export default class uiMain extends Vue {
 
   // Has Model
   get hasValue () {
-    return this.value !== null
+    return !is_Undefined(this.value)
   }
 
-  // Insert
+  // Insert to Parent
   insertMenu () {
-    let menu = this.$refs.menu as HTMLElement
+    this.$nextTick(() => {
+      let menu = this.$refs.menu as HTMLElement
 
-    insertBody(menu)
-    this.setPos()
+      insertBody(menu)
+      this.setPos()
+      window.addEventListener('resize', this.setPos, { passive: true })
+    })
   }
 
-  // Remove
+  // Remove in Parent
   removeMenu () {
     let menu = this.$refs.dropdown as HTMLElement
 
@@ -148,21 +151,15 @@ export default class uiMain extends Vue {
   // Show
   show () {
     this.isShow = true
-
-    this.$nextTick(() => {   
-      this.insertMenu()
-      window.addEventListener('resize', this.setPos, { passive: true })
-    })
-
-    this.$emit('show')
+    this.insertMenu()
+    this.$nextTick(() => this.$emit('show'))
   }
 
   // Hide
   hide () {
     this.isShow = false
     window.removeEventListener('resize', this.setPos)
-
-    this.$emit('hide')
+    this.$nextTick(() => this.$emit('hide'))
   }
 
   // Target Click
@@ -195,17 +192,39 @@ export default class uiMain extends Vue {
     }, 100)
   }
 
-  // Vue Function
+  // Watch Value
+  @Watch('value')
+  onValueChange (val : boolean | null) {
+    if(!!val) {
+      this.show()
+    } 
+    else {
+      this.hide()
+    }
+  }
+
+  // Watch Position
+  @Watch('fixed')
+  @Watch('width')
+  @Watch('maxHeight')
+  @Watch('right')
+  @Watch('center')
+  @Watch('top')
+  @Watch('targetMax')
+  @Watch('offsetY')
+  @Watch('offsetX')
+  onPositionChange () {
+    if(!this.isShow) return
+
+    this.setPos()
+  }
+
+  // Mounted
   mounted () {
     if(!!this.hasValue && !!this.value) return this.show()
   }
 
-  @Watch('value')
-  onValueChange (val : boolean | null) {
-    if(!!val) return this.show()
-    this.hide()
-  }
-
+  // Before Destroy
   beforeDestroy () {
     this.removeMenu()
   }
@@ -215,9 +234,14 @@ export default class uiMain extends Vue {
     const menu = h('div', {
       ref: 'menu',
       staticClass: 'ui-menu',
-      class: {
-        'ui-component--fixed': !!this.fixed
-      },
+      class: [
+        'ra',
+        'overflow',
+        {
+          'position-absolute': !this.fixed,
+          'position-fixed': !!this.fixed
+        }
+      ],
       style: {
         '--ui-menu-width': returnPX(this.width),
         '--ui-menu-max-height': returnPX(this.maxHeight)
@@ -236,7 +260,7 @@ export default class uiMain extends Vue {
         }
       ]
     }, [
-      this.$slots.default
+      this.$slots.menu
     ])
 
     const menuTransition = h('transition', {
@@ -247,16 +271,19 @@ export default class uiMain extends Vue {
       menu
     ])
 
-    const target = h('div', {
+    return h('div', {
       ref: 'target',
       staticClass: 'ui-menu-target',
       domProps: {
         id: `menu-${this._uid}`,
       },
-      class: {
-        'ui-component--inline-flex': true,
-        'ui-component--block': !!this.block,
-      },
+      class: [
+        'position-relative',
+        {
+          'd-inline-flex': !this.block,
+          'd-flex': !!this.block
+        }
+      ],
       on: {
         click: this.targetClick
       }
@@ -264,7 +291,5 @@ export default class uiMain extends Vue {
       this.$slots.target,
       menuTransition
     ])
-
-    return target
   }
 }

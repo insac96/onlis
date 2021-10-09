@@ -6,14 +6,32 @@
 
 // Style
 .ui-sidebar
-  &.ui-component-fashion--full
+  &.ui-component-fashion--full, &.ui-component-fashion--flat, &.ui-component-fashion--flat-full
     --ui-sidebar-text: var(--ui-component-text)
+
+// Main
+.ui-sidebar
+  position: fixed !important
+  bottom: 0
+  width: var(--ui-sidebar-width)
+  max-width: var(--ui-sidebar-width)
+  height: var(--ui-sidebar-height)
+  z-index: 100000 !important
+
+  // Is Layout
+  &--layout
+    z-index: 90000 !important
+
+  // Square
+  &--square
+    border-radius: 0 !important
 
   // Left
   &--left
     left: 0
     border-top-right-radius: var(--ui-radius)
     border-bottom-right-radius: var(--ui-radius)
+    box-shadow: 3px 0 10px rgba(0,0,0, 0.05)
     .ui-sidebar__body
       padding-right: var(--ui-space)
     .ui-sidebar-group__child
@@ -32,6 +50,7 @@
     right: 0
     border-top-left-radius: var(--ui-radius)
     border-bottom-left-radius: var(--ui-radius)
+    box-shadow: -3px 0 10px rgba(0,0,0, 0.05)
     .ui-sidebar__body
       padding-left: var(--ui-space)
     .ui-sidebar-group__child
@@ -40,32 +59,23 @@
       border-top-left-radius: var(--ui-radius)
       border-bottom-left-radius: var(--ui-radius)
 
-// Main
-.ui-sidebar
-  position: fixed !important
-  top: 0
-  flex-direction: column
-  width: var(--ui-sidebar-width)
-  max-width: var(--ui-sidebar-width)
-  height: 100%
-  z-index: 100000 !important
+  // No Radius Top
+  &--noRadiusTop
+    &.ui-sidebar--left
+      border-top-right-radius: 0
+    &.ui-sidebar--right
+      border-top-left-radius: 0
 
-  &__logo
-    display: flex
-    justify-content: center
-    align-items: center
+  &--noRadiusBottom
+    &.ui-sidebar--left
+      border-bottom-right-radius: 0
+    &.ui-sidebar--right
+      border-bottom-left-radius: 0
+
+  // Slot
+  &__header, &__footer, &__body
     padding: var(--ui-space)
-    color: rgb(var(--ui-component-text))
-    font-size: var(--ui-font-size-xl)
-    font-weight: 700
-    user-select: none
-
-  .ui-scroll
-    flex-grow: 1
+    color: rgb(var(--ui-sidebar-text))
 
   &__body
-    color: rgb(var(--ui-sidebar-text))
-
-  &__footer
-    padding: var(--ui-space)
-    color: rgb(var(--ui-sidebar-text))
+    padding: 0

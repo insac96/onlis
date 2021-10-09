@@ -1,0 +1,14 @@
+$displays: ("none", "block", "table", "table-cell", "table-row", "flex")
+$displays_inline: ("inline", "inline-block", "inline-table", "inline-flex")
+
+@each $display in $displays
+  .d-#{$display}
+    display: #{$display}
+
+@each $display in $displays_inline
+  .d-#{$display}
+    display: #{$display}
+    vertical-align: middle
+
+.full-width
+  width: 100%

@@ -1,24 +1,17 @@
-// Root
 .ui-badge
   --ui-color: var(--ui-success)
   --ui-badge-size: 12px
-  --ui-badge-zIndex: 2
+  --ui-badge-z-index: 2
 
-// Main
 .ui-badge
-  position: relative
-
   .ui-badge-dot
-    position: absolute
-    min-width: var(--ui-badge-size)
-    min-height: var(--ui-badge-size)
     bottom: 0
     right: 0
+    min-width: var(--ui-badge-size)
+    min-height: var(--ui-badge-size)
     background: rgb(var(--ui-color))
     border: 1.2px solid rgb(var(--ui-text-light-dark))
-    border-radius: var(--ui-radius)
-    z-index: var(--ui-badge-zIndex)
-    transition: all 0.25s ease
+    z-index: var(--ui-badge-z-index)
 
     &--left
       right: auto
@@ -28,13 +21,6 @@
       bottom: auto
       top: 0
 
-    &--hasContent
-      display: flex
-      align-items: center
-      justify-content: center
-      font-size: var(--ui-font-size-xs)
-      color: rgb(var(--ui-text-light)) 
-      font-weight: 700
+    &--text
       padding: 1px 4px
-      line-height: normal
     

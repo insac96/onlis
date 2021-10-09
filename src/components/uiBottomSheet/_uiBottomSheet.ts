@@ -13,8 +13,6 @@ export default class uiBottomSheet extends uiDialog {
 
   @Prop({ type: Boolean, default: false }) readonly blur!: boolean
 
-  @Prop({ type: Object }) control! : IControlPos
-
   // Control
   get controlConfig () {
     return {

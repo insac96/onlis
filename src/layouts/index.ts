@@ -12,3 +12,6 @@ export { default as uiCol } from './uiGrid/col'
 export { default as uiSidebar } from './uiSidebar/base'
 export { default as uiSidebarGroup } from './uiSidebar/group'
 export { default as uiSidebarItem } from './uiSidebar/item'
+
+// Navbar
+export { default as uiNavbar } from './uiNavbar'

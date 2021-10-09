@@ -54,19 +54,23 @@ export default class uiInput extends uiComponentColor {
   }
 
   public render(h: any): VNode {
-    // Icon Remove
-    const iconRemove = h(uiIconClose, {
-      on: {
-        click: this.onRemove.bind(this)
-      }
-    })
-
     // Icon Left
     const icon = h('div', {
       staticClass: 'ui-input__icon',
-      class: {
-        'ui-component--pointer': !!this.$listeners.icon
-      },
+      class: [
+        'position-relative',
+        'd-flex',
+        'align-center',
+        'justify-center',
+        'ra',
+        'line-normal',
+        'user-none',
+        'transition',
+        'overflow-hidden',
+        {
+          'cursor-pointer': !!this.$listeners.icon
+        }
+      ],
       on: {
         click: () => this.$emit('icon')
       }
@@ -77,10 +81,15 @@ export default class uiInput extends uiComponentColor {
     // Input Dom
     const inputDom = h('input', {
       staticClass: 'ui-input__dom',
-      class: {
-        'ui-input__dom--hasValue': !!this.value,
-        'ui-input__dom--dateTime': this.type === 'date' || this.type === 'time'
-      },
+      class: [
+        'grow-1',
+        'px-1',
+        'transition',
+        {
+          'ui-input__dom--hasValue': !!this.value,
+          'ui-input__dom--dateTime': this.type === 'date' || this.type === 'time'
+        }
+      ],
       domProps: {
         id: `input-${this._uid}`,
         value: this.value,
@@ -103,17 +112,36 @@ export default class uiInput extends uiComponentColor {
       }
     })
 
+    // Icon Remove
+    const iconRemove = h(uiIconClose, {
+      on: {
+        click: this.onRemove.bind(this)
+      }
+    })
+
     // Right
-    const right =  h('transition', {
+    const right = h('div', {
+      staticClass: 'ui-input__right',
+      class: [
+        'position-relative',
+        'd-flex',
+        'align-center',
+        'justify-center',
+        'mx-1',
+        'line-normal',
+        'user-none'
+      ]
+    }, [
+      !!this.isLoading ? h(uiLoading) : iconRemove
+    ])
+    
+    // Transition Right
+    const transitionRight =  h('transition', {
       props: {
         name: 'ui-zoom'
       }
     }, [
-      (!!this.isLoading || (!!this.remove && !!this.value)) && h('div', {
-        staticClass: 'ui-input__right',
-      }, [
-        !!this.isLoading ? h(uiLoading) : iconRemove
-      ])
+      (!!this.isLoading || (!!this.remove && !!this.value)) && right
     ])
 
     // Message Left
@@ -124,6 +152,14 @@ export default class uiInput extends uiComponentColor {
     }, [
       !!this.$slots.message && h('div', {
         staticClass: 'ui-input__message--left',
+        class: [
+          'position-absolute',
+          'font-size-xs',
+          'font-weight-500',
+          'user-none',
+          'line-normal',
+          'transition'
+        ]
       }, [
         this.$slots.message
       ])
@@ -137,6 +173,14 @@ export default class uiInput extends uiComponentColor {
     }, [
       !!this.$slots['message-right'] && h('div', {
         staticClass: 'ui-input__message--right',
+        class: [
+          'position-absolute',
+          'font-size-xs',
+          'font-weight-500',
+          'user-none',
+          'line-normal',
+          'transition'
+        ]
       }, [
         this.$slots['message-right']
       ])
@@ -148,9 +192,13 @@ export default class uiInput extends uiComponentColor {
       class: [
         'ui-component',
         {
-          'ui-component--flex': !this.inline,
-          'ui-component--inline-flex': !!this.inline,
+          'd-flex': !this.inline,
+          'd-inline-flex': !!this.inline,
         },
+        [
+          'align-center',
+          'justify-space-between'
+        ],
         {
           'ui-component--size--l': !this.size ,
           [`ui-component--size--${this.size}`]: !!this.size 
@@ -159,10 +207,7 @@ export default class uiInput extends uiComponentColor {
           'ui-input--focus': !!this.isFocus,
           'ui-input--error': !!this.danger || this.color === 'danger',
         },
-        {
-          'ui-component--loading': !!this.isLoading,
-          'ui-component--disabled': !!this.isDisabled,
-        },
+        this.classStatus,
         this.classFashion,
         this.classColor
       ],
@@ -177,7 +222,7 @@ export default class uiInput extends uiComponentColor {
     }, [
       !!this.$slots.icon && icon,
       inputDom,
-      right,
+      transitionRight,
       message,
       messageRight
     ])

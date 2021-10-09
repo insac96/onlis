@@ -65,6 +65,7 @@ export default class uiSidebarItem extends uiComponentColor {
   // Is Active
   get isActive () {
     if(!this.parentRoot) return false
+    
     if(!!this.target) return false
     else if(!!this.active) return true
     else if(!!this.to && !!this.$route){
@@ -153,24 +154,47 @@ export default class uiSidebarItem extends uiComponentColor {
   // Render
   public render(h: any): VNode {
     const icon = h('div', {
-      staticClass: 'ui-sidebar-item__icon'
+      staticClass: 'ui-sidebar-item__icon',
+      class: [
+        'd-flex',
+        'align-center',
+        'justify-center',
+        'font-size-l',
+        'user-none',
+        'transition'
+      ]
     }, [
       this.$slots.icon
     ])
 
     const content = h('div', {
       staticClass: 'ui-sidebar-item__content',
-      class: {
-        'ui-sidebar-item__content--notIcon': !this.$slots.icon
-      }
+      class: [
+        [
+          'grow-1',
+          'full-width',
+          'font-size-s',
+          'font-weight-500',
+          'user-none',
+          'transition',
+        ],
+        {
+          'ui-sidebar-item__content--notIcon': !this.$slots.icon
+        }
+      ]
     }, [
       this.$slots.default
     ])
 
     const right = h('div', {
-      staticClass: 'ui-sidebar-item__right'
+      staticClass: 'ui-sidebar-item__right',
+      class: [
+        'px-2',
+        'user-none',
+        'transition'
+      ]
     }, [
-      !!this.$slots.right ? this.$slots.right : h(uiIconArrow, {
+      !this.target ? this.$slots.right : h(uiIconArrow, {
         props: {
           top: !!this.isGroupOpen
         }
@@ -184,7 +208,11 @@ export default class uiSidebarItem extends uiComponentColor {
       },
       class: [
         'ui-component',
-        'ui-component--flex',
+        'd-flex',
+        'align-center',
+        'justify-space-between',
+        'full-width',
+        'overflow-hidden',
         this.classStatus,
         this.newClassColor,
         this.classFashion
@@ -200,7 +228,7 @@ export default class uiSidebarItem extends uiComponentColor {
     }, [
       !!this.$slots.icon && icon,
       content,
-      !!this.$slots.right || !!this.target && right
+      (!!this.$slots.right || !!this.target) && right
     ])
   }
 }

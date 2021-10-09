@@ -1,0 +1,39 @@
+.user-none
+  user-select: none
+
+.line-normal
+  line-height: normal
+
+// Cursor
+.cursor-pointer
+  cursor: pointer
+
+// Transition
+.transition
+  transition: all 0.25s ease
+
+// Overflow
+.overflow
+  overflow: auto
+.overflow-x
+  overflow-x: auto
+.overflow-y
+  overflow-y: auto
+.overflow-hidden
+  overflow: hidden
+.overflow-x-hidden
+  overflow-x: hidden
+.overflow-y-hidden
+  overflow-y: hidden
+
+// Position
+$positions: ("relative", "absolute", "sticky", "fixed")
+@each $position in $positions
+  .position-#{$position}
+    position: #{$position}
+
+// Visibility
+$visibilitys: ("hidden", "visible")
+@each $visibility in $visibilitys
+  .visibility-#{$visibility}
+    visibility: #{$visibility}

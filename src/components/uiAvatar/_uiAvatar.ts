@@ -7,13 +7,11 @@ import { returnPX } from '../../util'
 @Component
 export default class uiAvatar extends uiComponentColor {
 
-  @Prop({ type: String, default: 'full' }) fashion! : string
+  @Prop({ type: String, default: null }) color! : string
 
   @Prop() size! : any
 
   @Prop() imgSize! : any
-
-  @Prop({ type: Boolean }) circle! : boolean
 
   // On Click
   onClick (event : any) {
@@ -41,11 +39,14 @@ export default class uiAvatar extends uiComponentColor {
     return h('div', {
       staticClass: 'ui-avatar',
       class: [
-        {
-          'ui-avatar--circle': !!this.circle,
-        },
         'ui-component',
-        'ui-component--inline-flex',
+        [
+          'd-inline-flex',
+          'align-center',
+          'justify-center',
+          'user-none',
+          'line-normal'
+        ],
         this.classStatus,
         this.classFashion,
         this.classColor

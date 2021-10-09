@@ -20,13 +20,17 @@ export default class uiLoader extends Vue {
     return h('div', {
       staticClass: 'ui-loader',
       class: [
-        { [`ui-loader--${this.type}`]: !!this.type },
         {
-          'ui-loader--circle': !!this.circle
+          'd-inline-flex': !this.block,
+          'd-flex': !!this.block
         },
+        [
+          'position-relative',
+          'transition',
+          'overflow-hidden'
+        ],
         {
-          'ui-component--inline-flex': !this.block,
-          'ui-component--flex': !!this.block
+          [`ui-loader--${this.type}`]: !!this.type
         }
       ],
       style: {

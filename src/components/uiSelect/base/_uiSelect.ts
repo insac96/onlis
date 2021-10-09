@@ -1,11 +1,17 @@
 import { VNode } from 'vue'
+import { ISelectOption } from '../../../../types'
 import { Model, Component, Prop, Watch } from 'vue-property-decorator'
 import { uiComponentColor } from '../../../mixins/component'
 import { uiLoading, uiIconClose } from '../../../mixins/public'
+import uiClickOutside from '../../../directives/clickOutside'
+import uiList from '../../uiList/base/_uiList'
 import { getColor, returnPX, insertBody, toLowerCase, is_Undefined } from '../../../util'
-import { ISelectOption } from '../../../../types'
 
-@Component
+@Component({
+  directives: {
+    'uiClickOutside': uiClickOutside
+  }
+})
 export default class uiSelect extends uiComponentColor {
   componentName: string = 'select'
 
@@ -29,10 +35,6 @@ export default class uiSelect extends uiComponentColor {
   // Prop Select
   @Prop({ type: Boolean }) filter! : boolean
 
-  @Prop({ type: Boolean }) hideCheckbox! : boolean
-
-  @Prop({ type: Boolean }) checkboxRight! : boolean
-
   @Prop({ type: String, default: 'Search option...' }) placeholderFilter! : string
 
   @Prop({ type: String, default: 'No data available' }) noDataText! : string
@@ -55,16 +57,65 @@ export default class uiSelect extends uiComponentColor {
 
   options : ISelectOption[] = []
 
-  ////////////////Menu Options////////////////
-  // Insert
+  // Is Multiple
+  get isMultiple () {
+    return !!Array.isArray(this.value)
+  }
+
+  // Get Label Input
+  get labelInput () {
+    if(!this.value) return this.placeholder
+    if(!!this.isMultiple) return null
+
+    const option : ISelectOption = this.getOptionByValue(this.value)
+    return !!option ? option.label : this.placeholder
+  }
+
+  // Render list Label if is Multiple
+  get renderChips () {
+    if(!this.isMultiple) return null
+    if(this.value.length < 1) return this.placeholder
+    
+    else return this.value.map((val : ISelectOption['value'], index : number) => {
+      const option : ISelectOption = this.getOptionByValue(val)
+
+      if(!!option){
+        return this.$createElement('div', {
+          staticClass: 'ui-input__chip',
+          class: [
+            'd-flex',
+            'align-center',
+            'justify-center',
+            'px-2',
+            'ra',
+            'line-normal',
+            'user-none'
+          ]
+        }, [
+          option.label,
+          !!this.remove && this.$createElement(uiIconClose, {
+            class: [
+              'ml-1',
+              `select-chip-${this._uid}`
+            ],
+            on: {
+              click: this.onChipRemove.bind(this, index)
+            }
+          })
+        ])
+      }
+    })
+  }
+
+  // Insert Options
   insertOptions () {
-    let options = this.$refs.options as HTMLElement
+    const options = (this.$refs.options as any).$el as HTMLElement
 
     insertBody(options)
     this.setPos()
   }
 
-  // Remove
+  // Remove Options
   removeOptions () {
     let options = this.$refs.options as HTMLElement
 
@@ -80,7 +131,7 @@ export default class uiSelect extends uiComponentColor {
   // Set Pos
   setPos () {
     const target = this.$el as HTMLElement
-    const options = this.$refs.options as HTMLElement
+    const options = (this.$refs.options as any).$el as HTMLElement
 
     // Reset Pos
     options.style.top = ''
@@ -131,7 +182,7 @@ export default class uiSelect extends uiComponentColor {
     options.style.left = returnPX(NewPos.left)
   }
 
-  // Show
+  // Show Options
   showOptions () {
     if(!!this.isShowOptions) return
     
@@ -143,7 +194,7 @@ export default class uiSelect extends uiComponentColor {
     })
   }
 
-  // Hide
+  // Hide Options
   hideOptions () {
     this.isShowOptions = false
 
@@ -160,19 +211,6 @@ export default class uiSelect extends uiComponentColor {
     if(!this.isShowOptions) return
     if(!!event.target.closest(`#select-${this._uid}`)) return
     this.hideOptions()
-  }
-
-  // Before Destroy
-  beforeDestroy () {
-    this.removeOptions()
-  }
-  //////////////End Menu Options//////////////
-
-
-  ////////////////Select Logic////////////////
-  // Is Multiple
-  get isMultiple () {
-    return !!Array.isArray(this.value)
   }
 
   // Get Option By ID
@@ -236,42 +274,6 @@ export default class uiSelect extends uiComponentColor {
     this.$emit('change', this.value)
   }
 
-  // Get Label Input
-  get labelInput () {
-    if(!this.value) return this.placeholder
-    if(!!this.isMultiple) return null
-
-    const option : ISelectOption = this.getOptionByValue(this.value)
-    return !!option ? option.label : this.placeholder
-  }
-
-  // Render list Label if is Multiple
-  get renderChips () {
-    if(!this.isMultiple) return null
-
-    if(this.value.length < 1) return this.placeholder
-    
-    else return this.value.map((val : ISelectOption['value'], index : number) => {
-      const option : ISelectOption = this.getOptionByValue(val)
-
-      if(!!option){
-        return this.$createElement('div', {
-          staticClass: 'ui-input__center__chip'
-        }, [
-          option.label,
-          !!this.remove && this.$createElement(uiIconClose, {
-            class: [
-              `select-chip-${this._uid}`
-            ],
-            on: {
-              click: this.onChipRemove.bind(this, index)
-            }
-          })
-        ])
-      }
-    })
-  }
-
   // Chip Remove Click
   onChipRemove (index: number) {
     this.$delete(this.value, index)
@@ -279,6 +281,29 @@ export default class uiSelect extends uiComponentColor {
     if(!!this.isShowOptions){
       this.$nextTick(() => this.setPos())
     }
+  }
+
+  // On Click
+  onClick (event : any) {
+    if(!!event.target.closest(`.select-chip-${this._uid}`)) return
+
+    this.startRipple(event, this.$el as HTMLElement)
+
+    if(!this.isShowOptions){
+      this.showOptions()
+    }
+    else {
+      this.hideOptions()
+    }
+    
+    this.$emit('click', event)
+  }
+
+  // On Remove
+  onRemove () {
+    this.$emit('model', null)
+    this.$emit('change', this.value)
+    this.$emit('remove')
   }
 
   // On Filter
@@ -300,36 +325,33 @@ export default class uiSelect extends uiComponentColor {
       this.countFilter = null
     }
   }
-  //////////////End Select Logic//////////////
 
-  ////////////////Input Logic/////////////////
-  onClick (event : any) {
-    if(!!event.target.closest(`.select-chip-${this._uid}`)) return
+  // Watch Position
+  @Watch('fixed')
+  @Watch('offset')
+  @Watch('top')
+  @Watch('maxHeight')
+  onPositionChange () {
+    if(!this.isShowOptions) return
 
-    this.startRipple(event, this.$el as HTMLElement)
-
-    if(!this.isShowOptions){
-      this.showOptions()
-    }
-    else {
-      this.hideOptions()
-    }
-    
-    this.$emit('click', event)
+    this.setPos()
   }
 
-  onRemove () {
-    this.$emit('model', null)
-    this.$emit('change', this.value)
-    this.$emit('remove')
+  // Before Destroy
+  beforeDestroy () {
+    this.removeOptions()
   }
-  ////////////////End Input Logic/////////////
 
   public render(h: any): VNode {
     /////////////// Options ////////////////
     // Input Filter
     const inputFilter = h('input', {
       staticClass: 'ui-options__input',
+      class: [
+        'full-width',
+        'pa-2',
+        'font-size-s'
+      ],
       domProps: {
         value: this.textFilter,
         autocomplete: 'off'
@@ -346,21 +368,29 @@ export default class uiSelect extends uiComponentColor {
     })
 
     const noData = h('div', {
+      staticClass: 'ui-options__noData',
       class: {
-        'ui-options__noData' : !this.$slots['no-data']
+        'pa-2': !this.$slots['no-data'],
+        'font-size-s': !this.$slots['no-data'],
+        'text-center': !this.$slots['no-data']
       }
     }, [
       this.$slots['no-data'] ? this.$slots['no-data'] : this.noDataText
     ])
 
-    const options = h('div', {
+    const options = h(uiList, {
       staticClass: 'ui-options',
       ref: 'options',
-      class: {
-        'ui-component--fixed': !!this.fixed,
-      },
-      style: {
-        '--ui-options-max-height': returnPX(this.maxHeight)
+      class: [
+        'full-width',
+        {
+          'position-absolute': !this.fixed,
+          'position-fixed': !!this.fixed
+        }
+      ],
+      props: {
+        maxHeight: this.maxHeight,
+        color: this.color
       },
       directives: [
         {
@@ -368,7 +398,7 @@ export default class uiSelect extends uiComponentColor {
           value: this.isShowOptions
         },
         {
-          name: 'onlis-click-outside',
+          name: 'ui-click-outside',
           value: this.clickOutSide
         }
       ]
@@ -397,9 +427,20 @@ export default class uiSelect extends uiComponentColor {
     // Icon Left
     const icon = h('div', {
       staticClass: 'ui-input__icon',
-      class: {
-        'ui-component--pointer': !!this.$listeners.icon
-      },
+      class: [
+        'position-relative',
+        'd-flex',
+        'align-center',
+        'justify-center',
+        'ra',
+        'line-normal',
+        'user-none',
+        'transition',
+        'overflow-hidden',
+        {
+          'cursor-pointer': !!this.$listeners.icon
+        }
+      ],
       on: {
         click: () => this.$emit('icon')
       }
@@ -411,7 +452,16 @@ export default class uiSelect extends uiComponentColor {
     const center = h('div', {
       staticClass: 'ui-input__center',
       class: [
-        'ui-component--pointer',
+        [
+          'grow-1',
+          'full-width',
+          'd-flex',
+          'align-center',
+          'flex-wrap',
+          'cursor-pointer',
+          'transition',
+          'user-none'
+        ],
         {
           'ui-input__center--focus': !!this.isShowOptions,
           'ui-input__center--noValue': !this.value || (!!this.isMultiple && this.value.length < 1)
@@ -430,16 +480,28 @@ export default class uiSelect extends uiComponentColor {
     ])
 
     // Right
-    const right =  h('transition', {
+    const right = h('div', {
+      staticClass: 'ui-input__right',
+      class: [
+        'position-relative',
+        'd-flex',
+        'align-center',
+        'justify-center',
+        'mx-1',
+        'line-normal',
+        'user-none'
+      ]
+    }, [
+      !!this.isLoading ? h(uiLoading) : iconRemove
+    ])
+    
+    // Transition Right
+    const transitionRight =  h('transition', {
       props: {
         name: 'ui-zoom'
       }
     }, [
-      (!!this.isLoading || (!!this.remove && !!this.value && !this.isMultiple)) && h('div', {
-        staticClass: 'ui-input__right',
-      }, [
-        !!this.isLoading ? h(uiLoading) : iconRemove
-      ])
+      (!!this.isLoading || (!!this.remove && !!this.value && !this.isMultiple)) && right
     ])
 
     // Message Left
@@ -450,6 +512,14 @@ export default class uiSelect extends uiComponentColor {
     }, [
       !!this.$slots.message && h('div', {
         staticClass: 'ui-input__message--left',
+        class: [
+          'position-absolute',
+          'font-size-xs',
+          'font-weight-500',
+          'user-none',
+          'line-normal',
+          'transition'
+        ]
       }, [
         this.$slots.message
       ])
@@ -463,6 +533,14 @@ export default class uiSelect extends uiComponentColor {
     }, [
       !!this.$slots['message-right'] && h('div', {
         staticClass: 'ui-input__message--right',
+        class: [
+          'position-absolute',
+          'font-size-xs',
+          'font-weight-500',
+          'user-none',
+          'line-normal',
+          'transition'
+        ]
       }, [
         this.$slots['message-right']
       ])
@@ -474,9 +552,13 @@ export default class uiSelect extends uiComponentColor {
       class: [
         'ui-component',
         {
-          'ui-component--flex': !this.inline,
-          'ui-component--inline-flex': !!this.inline,
+          'd-flex': !this.inline,
+          'd-inline-flex': !!this.inline,
         },
+        [
+          'align-center',
+          'justify-space-between'
+        ],
         {
           'ui-component--size--l': !this.size ,
           [`ui-component--size--${this.size}`]: !!this.size 
@@ -485,10 +567,7 @@ export default class uiSelect extends uiComponentColor {
           'ui-input--focus': !!this.isShowOptions,
           'ui-input--error': !!this.danger || this.color === 'danger'
         },
-        {
-          'ui-component--loading': !!this.isLoading,
-          'ui-component--disabled': !!this.isDisabled,
-        },
+        this.classStatus,
         this.classFashion,
         this.classColor
       ],
@@ -506,7 +585,7 @@ export default class uiSelect extends uiComponentColor {
     }, [
       !!this.$slots.icon && icon,
       center,
-      right,
+      transitionRight,
       message,
       messageRight,
       optionsTransition

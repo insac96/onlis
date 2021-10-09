@@ -1,76 +1,63 @@
 // Root
 .ui-dialog-root
   --ui-dialog-max-height: auto
+  --ui-dialog-max-width: 400px
+  --ui-dialog-margin: var(--ui-space)
+  --ui-dialog-radius: var(--ui-radius)
   --ui-dialog-text: var(--ui-text)
 
 // Style
 .ui-dialog-root
-  &.ui-component--absolute
-    border-radius: inherit
-    
-  &--blur
-    backdrop-filter: saturate(180%) blur(15px)
-
   &--shake
     --ui-dialog-animation: shake-effect .25s ease-in
-
-  &--default
-    --ui-dialog-max-width: 400px
-    --ui-dialog-margin: var(--ui-space)
-    --ui-dialog-radius: var(--ui-radius)
-    align-items: center
-
   &--bottom
     --ui-dialog-max-width: 100%
     --ui-dialog-margin: 0
     --ui-dialog-radius: var(--ui-radius) var(--ui-radius) 0 0
-    align-items: flex-end
-
   &--fullScreen
     --ui-dialog-margin: 0
     --ui-dialog-radius: 0
-    align-items: center
-    .ui-dialog
-      max-width: 100% !important
-      height: 100% !important
-      max-height: 100% !important
-
-  // CLose
   .ui-icon-close
     --ui-icon-close: var(--ui-component-text)
     --ui-icon-close-size: 15px
 
 // Main
 .ui-dialog-root
-  position: fixed
   top: 0
   left: 0
   width: 100%
   height: 100%
-  display: flex
-  justify-content: center
-  overflow: hidden
   z-index: 100000
+  // Absolute
+  &.position-absolute
+    border-radius: inherit
+    
+  // Blur 
+  &--blur
+    backdrop-filter: saturate(180%) blur(15px)
+
+  // Full Screen
+  &--fullScreen
+    .ui-dialog
+      max-width: 100% !important
+      height: 100% !important
+      max-height: 100% !important
 
   // Overlay
   .ui-dialog-overlay
-    position: absolute
     top: 0
     left: 0
     width: 100%
     height: 100%
     background: rgba(0,0,0, .4)
-    cursor: pointer
 
   // Control
   .ui-dialog-control
-    position: absolute
     bottom: 0
     left: 0
     width: auto
     height: auto
     max-width: 100%
-    padding: var(--ui-space)
     animation: right-effect .25s ease-in forwards
     z-index: 2
     &--block
@@ -85,36 +72,16 @@
 
   // Content
   .ui-dialog
-    flex-direction: column
     width: 100%
-    height: auto
     max-width: var(--ui-dialog-max-width)
     max-height: var(--ui-dialog-max-height)
     border-radius: var(--ui-dialog-radius)
     margin: var(--ui-dialog-margin)
     animation: var(--ui-dialog-animation)
-
     &.ui-component-fashion--flat, &.ui-component-fashion--flat-full, &.ui-component-fashion--full
       --ui-dialog-text: var(--ui-component-text)
-
-    &__title, &__header, &__body, &__footer
-      position: relative
-      padding: var(--ui-space)
-
     &__header, &__body, &__footer
       color: rgb(var(--ui-dialog-text))
-
-    &__title
-      font-size: var(--ui-font-size-xl)
-      font-weight: 700
-      text-align: center
-      line-height: normal
-      user-select: none
-
-    &__body
-      flex-grow: 1
-      overflow: auto
-
     &__close
       position: absolute
       top: calc(var(--ui-radius) * 0.4)
@@ -141,6 +108,3 @@
         --ui-dialog-animation: up-effect .25s reverse ease-in forwards
     &--bottom
       --ui-dialog-animation: up-effect .25s reverse ease-out forwards
-    
-
-

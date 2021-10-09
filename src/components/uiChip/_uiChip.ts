@@ -11,6 +11,8 @@ export default class uiChip extends uiComponentColor {
 
   @Prop({ type: String, default: 's' }) size! : string
 
+  @Prop({ type: String, default: 'full' }) fashion! : string
+
   @Prop({ type: String, default: null }) color! : string
 
   @Prop() width! : any
@@ -55,9 +57,13 @@ export default class uiChip extends uiComponentColor {
 
     const right = h('div', {
       staticClass: 'ui-chip__right',
-      class: {
-        'ui-chip__right--loading': !!this.isLoading
-      }
+      class: [
+        'position-relative',
+        'd-flex',
+        'align-center',
+        'justify-center',
+        'ml-2'
+      ]
     }, [ 
       !!this.isLoading ? h(uiLoading) : remove
     ])
@@ -67,7 +73,13 @@ export default class uiChip extends uiComponentColor {
       ref: 'chip',
       class: [
         'ui-component',
-        'ui-component--inline-flex',
+        [
+          'd-inline-flex',
+          'align-center',
+          'justify-center',
+          'line-normal',
+          'user-none'
+        ],
         {
           'ui-component--size--s': !this.size,
           [`ui-component--size--${this.size}`]: !!this.size 

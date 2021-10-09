@@ -5,6 +5,8 @@ import { Component, Prop } from 'vue-property-decorator'
 export default class uiFlex extends Vue {
   static install: (vue: any) => any
 
+  @Prop({ type: Boolean  }) inline! : boolean
+
   @Prop({ type: String , default: 'space-between' }) jus! : string
 
   @Prop({ type: String , default: 'center' }) align! : string
@@ -19,7 +21,10 @@ export default class uiFlex extends Vue {
     return h('div', {
       staticClass: 'ui-flex',
       class: [
-        'd-flex',
+        {
+          'd-flex': !this.inline,
+          'd-inline-flex': !!this.inline
+        },
         `justify-${this.jus}`,
         `align-${this.align}`,
         `flex-${this.dir}`,

@@ -32,37 +32,86 @@ export default class uiCard extends uiComponentColor {
   }
 
   public render(h: any): VNode {
-    //Image
-    const defaultImage = this.renderSlot('img', null, true)
-    const avatarImage = this.renderSlot('img', 'avatar')
+    // Loading
+    const loading = h(uiLoading, {
+      props: {
+        large: true
+      }
+    })
 
-    //Title
-    const defaultTitle = this.renderSlot('title')
-    const centerTitle = this.renderSlot('title', 'center')
-    const rightTitle = this.renderSlot('title', 'right')
+    // Img
+    const img = h('div', {
+      staticClass: 'ui-card__img',
+      class: [
+        'd-flex',
+        'align-center',
+        'justify-center'
+      ]
+    }, [
+      this.$slots.img
+    ])
 
-    //SubTitle
-    const defaultSubtitle = this.renderSlot('subtitle')
-    const centerSubtitle = this.renderSlot('subtitle', 'center')
-    const rightSubtitle = this.renderSlot('subtitle', 'right')
+    // Title
+    const title = h('div', {
+      staticClass: 'ui-card__title',
+      class: [
+        'pt-2 px-2',
+        'font-size-l',
+        'font-weight-700',
+        'line-normal',
+        'user-none',
+        'transition'
+      ]
+    }, [
+      this.$slots.title
+    ])
+
+    // Subtitle
+    const subtitle = h('div', {
+      staticClass: 'ui-card__subtitle',
+      class: [
+        'px-2',
+        'font-size-xs',
+        'line-normal',
+        'user-none',
+        'transition'
+      ]
+    }, [
+      this.$slots.subtitle
+    ])
 
     //Body
     const body = h('div', {
-      staticClass: 'ui-card__body'
+      staticClass: 'ui-card__body',
+      class: [
+        'position-relative',
+        'grow-1',
+        'pa-2',
+        'overflow',
+        'transition'
+      ]
     }, [
       this.$slots.default
     ])
 
-    //Footer
-    const defaultFooter = this.renderSlot('footer')
-    const centerFooter = this.renderSlot('footer', 'center')
-    const rightFooter = this.renderSlot('footer', 'right')
+    // Footer
+    const footer = h('div', {
+      staticClass: 'ui-card__footer',
+      class: [
+        'pb-2 px-2',
+        'transition'
+      ]
+    }, [
+      this.$slots.footer
+    ])
 
+    // Main
     return h('div', {
       staticClass: 'ui-card',
       class: [
         'ui-component',
-        'ui-component--flex',
+        'd-flex',
+        'flex-column',
         this.classStatus,
         this.classFashion,
         this.classColor
@@ -82,29 +131,12 @@ export default class uiCard extends uiComponentColor {
         click: this.onClick
       }
     }, [
-      //Loading
-      !!this.isLoading && h(uiLoading, {
-        props: {
-          large: true
-        }
-      }),
-      //Img
-      !!this.$slots.img && !this.$slots[`img-avatar`] && defaultImage,
-      !this.$slots.img && !!this.$slots[`img-avatar`] && avatarImage,
-      //Title
-      !!this.$slots.title && !this.$slots[`title-center`] && !this.$slots[`title-right`] && defaultTitle,
-      !this.$slots.title && !!this.$slots[`title-center`] && !this.$slots[`title-right`] && centerTitle,
-      !this.$slots.title && !this.$slots[`title-center`] && !!this.$slots[`title-right`] && rightTitle,
-      //SubTitle
-      !!this.$slots.subtitle && !this.$slots[`subtitle-center`] && !this.$slots[`subtitle-right`] && defaultSubtitle,
-      !this.$slots.subtitle && !!this.$slots[`subtitle-center`] && !this.$slots[`subtitle-right`] && centerSubtitle,
-      !this.$slots.subtitle && !this.$slots[`subtitle-center`] && !!this.$slots[`subtitle-right`] && rightSubtitle,
-      //Body
+      !!this.isLoading && loading,
+      !!this.$slots.img && img,
+      !!this.$slots.title && title,
+      !!this.$slots.subtitle && subtitle,
       !!this.$slots.default && body,
-      //Footer
-      !!this.$slots.footer && !this.$slots[`footer-center`] && !this.$slots[`footer-right`] && defaultFooter,
-      !this.$slots.footer && !!this.$slots[`footer-center`] && !this.$slots[`footer-right`] && centerFooter,
-      !this.$slots.footer && !this.$slots[`footer-center`] && !!this.$slots[`footer-right`] && rightFooter,
+      !!this.$slots.footer && footer
     ]) 
   }
 }

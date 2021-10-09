@@ -22,12 +22,27 @@ export default class uiBadge extends uiComponentColor {
   public render(h: any): VNode { 
     const dot = h('div', {
       staticClass: 'ui-badge-dot',
-      class: {
-        'ui-badge-dot--top': !!this.top,
-        'ui-badge-dot--left': !!this.left,
-        'ui-badge-dot--border': !!this.border,
-        'ui-badge-dot--hasContent': !!this.$slots.text,
-      },
+      class: [
+        'position-absolute',
+        [
+          'd-flex',
+          'align-center',
+          'justify-center',
+          'ra'
+        ],
+        [
+          'font-size-xs',
+          'font-weight-700',
+          'text-light',
+          'line-normal',
+          'transition'
+        ],
+        {
+          'ui-badge-dot--top': !!this.top,
+          'ui-badge-dot--left': !!this.left,
+          'ui-badge-dot--text': !!this.$slots.text,
+        }
+      ],
       directives: [
         {
           name: 'show',
@@ -43,15 +58,16 @@ export default class uiBadge extends uiComponentColor {
         name: 'ui-zoom'
       }
     }, [ 
-      dot
+      dot 
     ])
 
     return h('div', {
       staticClass: 'ui-badge',
       class: [
+        'position-relative',
         {
-          'ui-component--inline-flex': !this.block,
-          'ui-component--flex': !!this.block
+          'd-inline-flex': !this.block,
+          'd-flex': !!this.block
         },
         this.classColor
       ],
@@ -59,7 +75,7 @@ export default class uiBadge extends uiComponentColor {
         this.styleColor,
         {
           '--ui-badge-size': returnPX(this.size),
-          '--ui-badge-zIndex': this.zIndex
+          '--ui-badge-z-index': this.zIndex
         }
       ]
     }, [ 

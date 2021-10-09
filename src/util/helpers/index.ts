@@ -53,7 +53,7 @@ export const is_Percent = (value : any) : boolean => {
 }
 
 export const is_Size = (value : string) : boolean => {
-  return /px$|rem$|em$|%$|vh$|vw$/i.test(value)
+  return /px$|rem$|em$|%$|vh$|vw$|^calc|auto/i.test(value)
 }
 
 export const returnPX = (value : any) : string | null => {

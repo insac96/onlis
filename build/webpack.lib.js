@@ -7,7 +7,7 @@ module.exports = {
 
   entry: {
     'index': './src/lib.ts',
-    'lib.min': './src/lib.ts',
+    'onlis.min': './src/lib.ts',
   },
 
   output: {
@@ -17,13 +17,5 @@ module.exports = {
     libraryTarget: 'umd',
     umdNamedDefine: true,
     globalObject: 'typeof self !== \'undefined\' ? self : this'
-  },
-
-  optimization: {
-    minimizer: [
-      new UglifyJsPlugin({
-        include: /(min)\.js$/,
-      })
-    ]
   }
 }

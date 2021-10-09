@@ -45,6 +45,13 @@ export default class uiSidebarGroup extends uiComponent {
   public render(h: any): VNode {
     const target = h('div', {
       staticClass: 'ui-sidebar-group__target',
+      class: [
+        'full-width',
+        'd-flex',
+        'align-center',
+        'cursor-pointer',
+        'overflow-hidden'
+      ],
       on: {
         click: this.onTargetClick
       }
@@ -77,9 +84,13 @@ export default class uiSidebarGroup extends uiComponent {
       domProps: {
         id: this.id
       },
-      class: {
-        'ui-component--disabled': !!this.isDisabled
-      }
+      class: [
+        'd-flex',
+        'flex-column',
+        {
+          'ui-component--disabled': !!this.isDisabled
+        }
+      ]
     }, [
       !!this.$slots.target && target,
       !!this.$slots.child && childTransition

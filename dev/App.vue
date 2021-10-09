@@ -2,8 +2,8 @@
   <ui-app>
     <ui-main>
       <ui-row jus="center">
-        <ui-col w="5" sm="12" xs="12">
-          <home></home>
+        <ui-col w="6" sm="12" xs="12">
+          <home></home>      
         </ui-col>
       </ui-row>
     </ui-main>
@@ -21,6 +21,10 @@ import home from './home.vue'
   }
 })
 export default class App extends Vue {
+  active : boolean = false
 
+  left : boolean = false
+
+  right : boolean = false
 }
 </script>

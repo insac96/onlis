@@ -56,7 +56,7 @@ export default class uiCheckBox extends uiComponentColor {
   }
 
   // Input
-  onInput (event: any) : void {
+  onInput () : void {
     if(!is_Undefined(this.checked)) return
 
     if(!!this.isLoading || !!this.isDisabled) return
@@ -126,8 +126,12 @@ export default class uiCheckBox extends uiComponentColor {
     // Input
     const input = h('input', {
       staticClass: 'ui-checkbox-input',
+      class: [
+        'position-absolute',
+        'visibility-hidden'
+      ],
       domProps: {
-        id: this._uid,
+        id: `checkbox-${this._uid}`,
         checked: this.isChecked,
         disabled: this.isDisabled
       },
@@ -143,12 +147,25 @@ export default class uiCheckBox extends uiComponentColor {
     })
 
     // Label
-    const label = h('span', {
-      staticClass: 'ui-checkbox-label',
-      class: {
-        'ui-checkbox-label--right': !this.labelLeft,
-        'ui-checkbox-label--left': !!this.labelLeft,
-        'ui-checkbox-label--space': !!this.labelSpace,
+    const label = h('label', {
+      class: [
+        'cursor-pointer',
+        'user-none',
+        // Right
+        { 
+          'order-3': !this.labelLeft,
+          'ml-1': !this.labelLeft && !this.labelSpace,
+          'ml-auto': !this.labelLeft && !!this.labelSpace
+        },
+        // Left
+        { 
+          'order-1': !!this.labelLeft,
+          'mr-1': !!this.labelLeft && !this.labelSpace,
+          'mr-auto': !!this.labelLeft && !!this.labelSpace
+        }
+      ],
+      attrs: {
+        for: `checkbox-${this._uid}`
       }
     }, [
       this.$slots.default
@@ -180,7 +197,14 @@ export default class uiCheckBox extends uiComponentColor {
 
     // Text Switch
     const textSwitch = h('div', {
-      staticClass: 'ui-switch-text'
+      staticClass: 'ui-switch-text',
+      class: [
+        'd-flex',
+        'align-center',
+        'font-size-xs',
+        'font-weight-600',
+        'user-none'
+      ]
     }, [
       !!this.isChecked ? on : off
     ])
@@ -191,17 +215,23 @@ export default class uiCheckBox extends uiComponentColor {
     })
 
     // Checkbox
-    const checkbox = h('div', {
+    const checkbox = h('label', {
       staticClass: 'ui-checkbox',
       class: [
         'ui-component',
+        [
+          'd-flex',
+          'align-center',
+          'justify-center',
+          'order-2',
+          'ra',
+          'cursor-pointer',
+          'overflow-hidden',
+          'user-none'
+        ],
         {
           'ui-component-fashion--basic': !this.isChecked,
           'ui-component-fashion--full': !!this.isChecked
-        },
-        {
-          'ui-component--loading': !!this.isLoading,
-          'ui-component--disabled': !!this.isDisabled,
         },
         {
           'ui-checkbox--default': !this.switch,
@@ -209,6 +239,7 @@ export default class uiCheckBox extends uiComponentColor {
           'ui-checkbox--checked': !!this.isChecked,
           'ui-checkbox--disabled': !!this.isDisabled,
         },
+        this.classStatus,
         this.classColor
       ],
       style: [
@@ -216,7 +247,10 @@ export default class uiCheckBox extends uiComponentColor {
         {
           '--ui-checkbox-size': returnPX(this.size)
         }
-      ]
+      ],
+      attrs: {
+        for: `checkbox-${this._uid}`
+      }
     }, [
       !!this.isLoading && loading,
       !!this.switch && textSwitch,
@@ -224,15 +258,18 @@ export default class uiCheckBox extends uiComponentColor {
     ])
 
     // Root
-    return h('label', {
+    return h('div', {
       staticClass: 'ui-checkbox-root',
-      class: {
-        'ui-component--inline-flex': !this.labelSpace,
-        'ui-component--flex': !!this.labelSpace,
-      },
-      attrs: {
-        for: this._uid
-      }
+      class: [
+        {
+          'd-inline-flex': !this.labelSpace,
+          'd-flex': !!this.labelSpace,
+        },
+        [
+          'align-center',
+          'position-relative'
+        ]
+      ]
     }, [
       input,
       checkbox,

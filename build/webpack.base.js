@@ -71,7 +71,7 @@ module.exports = {
   optimization: {
     minimizer: [
       new UglifyJsPlugin({
-        include: /(min|index)\.js$/,
+        include: /(min)\.js$/,
       })
     ]
   }

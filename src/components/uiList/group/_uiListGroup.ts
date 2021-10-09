@@ -1,14 +1,32 @@
 import Vue, { VNode } from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
-import { uiComponentColor } from '../../../mixins/component'
-import { returnPX } from '../../../util'
+import { Component } from 'vue-property-decorator'
 
 @Component
-export default class uiListItem extends uiComponentColor {
+export default class uiListItem extends Vue {
+
+  static install: (vue: any) => any
+
+  componentName: string = 'list-group'
+
+  // Get Parent Sidebar
+  get parentList () {
+    const parent = this.$parent as any
+    if(!parent) return null
+
+    return parent.componentName === 'list' ? parent : null
+  }
 
   public render(h: any): VNode {
     const title = h('div', {
       staticClass: 'ui-list-group__title',
+      class: [
+        'd-flex',
+        'align-center',
+        'pa-2',
+        'font-size-s',
+        'font-weight-700',
+        'user-none'
+      ]
     }, [
       !!this.$slots.title ? this.$slots.title : 'Group'
     ])
@@ -22,7 +40,8 @@ export default class uiListItem extends uiComponentColor {
     return h('div', {
       staticClass: 'ui-list-group',
       class: [
-        'ui-component--flex',
+        'd-flex',
+        'flex-column'
       ]
     }, [
       title,
