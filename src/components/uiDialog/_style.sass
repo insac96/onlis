@@ -1,28 +1,39 @@
 // Root
-.ui-dialog-root
+.ui-dialog
   --ui-dialog-max-height: auto
-  --ui-dialog-max-width: 400px
+  --ui-dialog-width: 400px
   --ui-dialog-margin: var(--ui-space)
   --ui-dialog-radius: var(--ui-radius)
   --ui-dialog-text: var(--ui-text)
 
 // Style
-.ui-dialog-root
+.ui-dialog
   &--shake
     --ui-dialog-animation: shake-effect .25s ease-in
-  &--bottom
-    --ui-dialog-max-width: 100%
+  // Top, Bottom
+  &--bottom, &--top
+    --ui-dialog-width: 100%
+  // No Space
+  &--no-space
     --ui-dialog-margin: 0
-    --ui-dialog-radius: var(--ui-radius) var(--ui-radius) 0 0
+    &.ui-dialog--top
+      --ui-dialog-radius: 0 0 var(--ui-radius) var(--ui-radius)
+    &.ui-dialog--bottom
+      --ui-dialog-radius: var(--ui-radius) var(--ui-radius) 0 0
+  // Full Screen
   &--fullScreen
     --ui-dialog-margin: 0
     --ui-dialog-radius: 0
+  // Icon CLose
   .ui-icon-close
     --ui-icon-close: var(--ui-component-text)
     --ui-icon-close-size: 15px
+  // Icon Loading
+  .ui-loading-root
+    --ui-loading-size: var(--ui-size-s)
 
 // Main
-.ui-dialog-root
+.ui-dialog
   top: 0
   left: 0
   width: 100%
@@ -38,13 +49,13 @@
 
   // Full Screen
   &--fullScreen
-    .ui-dialog
+    .ui-dialog__content
       max-width: 100% !important
       height: 100% !important
       max-height: 100% !important
 
   // Overlay
-  .ui-dialog-overlay
+  &__overlay
     top: 0
     left: 0
     width: 100%
@@ -52,59 +63,80 @@
     background: rgba(0,0,0, .4)
 
   // Control
-  .ui-dialog-control
-    bottom: 0
+  &__control
     left: 0
+    bottom: 0
     width: auto
     height: auto
     max-width: 100%
-    animation: right-effect .25s ease-in forwards
     z-index: 2
     &--block
       min-width: 100%
     &--right
-      left: auto
       right: 0
-      animation: left-effect .25s ease-in forwards
+      left: auto
     &--top
-      bottom: auto
       top: 0
+      bottom: auto
 
   // Content
-  .ui-dialog
-    width: 100%
-    max-width: var(--ui-dialog-max-width)
+  &__content
+    width: var(--ui-dialog-width)
+    max-width: 100%
     max-height: var(--ui-dialog-max-height)
     border-radius: var(--ui-dialog-radius)
     margin: var(--ui-dialog-margin)
     animation: var(--ui-dialog-animation)
-    &.ui-component-fashion--flat, &.ui-component-fashion--flat-full, &.ui-component-fashion--full
-      --ui-dialog-text: var(--ui-component-text)
     &__header, &__body, &__footer
-      color: rgb(var(--ui-dialog-text))
+      color: rgb(var(--ui-component-text-change))
     &__close
-      position: absolute
       top: calc(var(--ui-radius) * 0.4)
       right: calc(var(--ui-radius) * 0.4)
       z-index: 1
 
 // Effect
-.ui-dialog-enter-active 
+.effect-dialog-enter-active 
   animation: show-effect .25s ease forwards
-  &.ui-dialog-root
-    &--default
-      --ui-dialog-animation: zoom-effect .25s cubic-bezier(.3, .5 , 0 , 1.5) forwards
-      &.ui-dialog-root--fullScreen
-        --ui-dialog-animation: down-effect .25s ease-out forwards
-    &--bottom
-      --ui-dialog-animation: up-effect .25s ease forwards
+  &.ui-dialog--no-effect
+    animation: show-effect .25s ease forwards
+  &:not(.ui-dialog--no-effect)
+    &.ui-dialog
+      &--center
+        --ui-dialog-animation: zoom-effect .25s cubic-bezier(.3, .5 , 0 , 1.5) forwards
+      &--fullScreen
+        --ui-dialog-animation: down-effect .25s ease forwards
+      &--bottom
+        --ui-dialog-animation: up-effect .25s ease forwards
+      &--top
+        --ui-dialog-animation: down-effect .25s ease forwards
+    .ui-dialog__control
+      animation: right-effect .25s ease forwards
+      &--right
+        animation: left-effect .25s ease forwards
+      &--block
+        animation: up-effect .25s ease forwards
+        &.ui-dialog__control--top
+          animation: down-effect .25s ease forwards
 
-.ui-dialog-leave-active 
+.effect-dialog-leave-active 
   animation: show-effect .25s reverse ease forwards
-  &.ui-dialog-root
-    &--default
-      --ui-dialog-animation: zoom-effect .25s reverse cubic-bezier(.3, .5 , 0 , 1.5) forwards
-      &.ui-dialog-root--fullScreen
+  &.ui-dialog--no-effect
+    animation: show-effect .25s reverse ease forwards
+  &:not(.ui-dialog--no-effect)
+    &.ui-dialog
+      &--center
+        --ui-dialog-animation: zoom-effect .25s reverse cubic-bezier(.3, .5 , 0 , 1.5) forwards
+      &--fullScreen
         --ui-dialog-animation: up-effect .25s reverse ease-in forwards
-    &--bottom
-      --ui-dialog-animation: up-effect .25s reverse ease-out forwards
+      &--bottom
+        --ui-dialog-animation: up-effect .25s reverse ease-out forwards
+      &--top
+        --ui-dialog-animation: down-effect .25s reverse ease-out forwards
+    .ui-dialog__control
+      animation: right-effect .25s reverse ease-out forwards
+      &--right
+        animation: left-effect .25s reverse ease-out forwards
+      &--block
+        animation: up-effect .25s reverse ease-out forwards
+        &.ui-dialog__control--top
+          animation: down-effect .25s reverse ease-out forwards

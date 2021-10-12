@@ -45,14 +45,14 @@ export default class uiComponent extends Vue {
   // Class Status
   get classStatus () {
     return {
-      'ui-component--active': !!this.isActive,
-      'ui-component--disabled': !!this.isDisabled,
-      'ui-component--loading': !!this.isLoading,
-      'ui-component--pointer': !!this.isPointer,
+      'ui-status--active': !!this.isActive,
+      'ui-status--disabled': !!this.isDisabled,
+      'ui-status--loading': !!this.isLoading,
+      'cursor-pointer': !!this.isPointer,
     }
   }
 
-  // On Link Active
+  // On Link
   onLink () {
     if (!!this.to) {
       if(!this.$router) return
@@ -61,5 +61,12 @@ export default class uiComponent extends Vue {
     else if (!!this.href) {
       window.open(this.href, !this.self ? '_blank' : '_self')
     }
+  }
+
+  // On Click
+  onClick (event : any) {
+    if(!this.isPointer) return
+    this.onLink()
+    this.$emit('click', event)
   }
 }

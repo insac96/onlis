@@ -11,7 +11,7 @@ import uiClickOutside from '../../directives/clickOutside'
 export default class uiMain extends Vue {
   static install: (vue: any) => void
 
-  @Model('model', { type: Boolean, default: undefined }) readonly value!: boolean | null
+  @Model('model', { type: Boolean, default: undefined }) readonly value!: boolean
 
   @Prop({ type: Boolean }) block! : boolean
 
@@ -34,6 +34,8 @@ export default class uiMain extends Vue {
   @Prop({ type: Boolean }) targetMax! : boolean
 
   @Prop({ type: Boolean }) targetToggle! : boolean
+
+  @Prop({ type: Boolean }) targetWidth! : boolean
 
   @Prop({ type: Boolean, default: true }) closeOnContent! : boolean
 
@@ -101,8 +103,12 @@ export default class uiMain extends Vue {
     const target_width = targetPos.width
     const target_height = targetPos.height
 
-    if(!!this.targetMax){
+    if(!!this.targetMax || !!this.targetWidth){
       menu.style.maxWidth = returnPX(target_width)
+    }
+
+    if(!!this.targetWidth){
+      menu.style.width = returnPX(target_width)
     }
 
     // Menu Pos
@@ -150,6 +156,8 @@ export default class uiMain extends Vue {
 
   // Show
   show () {
+    if(!this.$slots.default) return
+
     this.isShow = true
     this.insertMenu()
     this.$nextTick(() => this.$emit('show'))
@@ -157,6 +165,8 @@ export default class uiMain extends Vue {
 
   // Hide
   hide () {
+    if(!this.$slots.default) return
+
     this.isShow = false
     window.removeEventListener('resize', this.setPos)
     this.$nextTick(() => this.$emit('hide'))
@@ -194,7 +204,7 @@ export default class uiMain extends Vue {
 
   // Watch Value
   @Watch('value')
-  onValueChange (val : boolean | null) {
+  onValueChange (val : boolean) {
     if(!!val) {
       this.show()
     } 
@@ -204,6 +214,7 @@ export default class uiMain extends Vue {
   }
 
   // Watch Position
+  @Watch('block')
   @Watch('fixed')
   @Watch('width')
   @Watch('maxHeight')
@@ -211,6 +222,7 @@ export default class uiMain extends Vue {
   @Watch('center')
   @Watch('top')
   @Watch('targetMax')
+  @Watch('targetWidth')
   @Watch('offsetY')
   @Watch('offsetX')
   onPositionChange () {
@@ -237,13 +249,16 @@ export default class uiMain extends Vue {
       class: [
         'ra',
         'overflow',
+        'ui-component',
+        'ui-component--shadow',
+        'ui-fashion--basic',
         {
           'position-absolute': !this.fixed,
           'position-fixed': !!this.fixed
         }
       ],
       style: {
-        '--ui-menu-width': returnPX(this.width),
+        '--ui-menu-width': !this.targetWidth ? returnPX(this.width) : null,
         '--ui-menu-max-height': returnPX(this.maxHeight)
       },
       on: {
@@ -260,7 +275,7 @@ export default class uiMain extends Vue {
         }
       ]
     }, [
-      this.$slots.menu
+      this.$slots.default
     ])
 
     const menuTransition = h('transition', {
@@ -289,7 +304,7 @@ export default class uiMain extends Vue {
       }
     }, [
       this.$slots.target,
-      menuTransition
+      !!this.$slots.default && menuTransition
     ])
   }
 }

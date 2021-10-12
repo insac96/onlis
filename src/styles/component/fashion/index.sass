@@ -1,6 +1,71 @@
 @import '_basic'
 @import '_full'
 @import '_flat'
-@import '_flatFull'
 @import '_transparent'
 @import '_text'
+
+// Public
+.ui-component
+  &.ui-fashion
+    // Border
+    &--basic, &--full, &--flat, &--transparent
+      --ui-border-color: var(--ui-component-text)
+      
+    // Not Color
+    &--basic, &--full
+      &:not(.ui-component--color)
+        --ui-component-background: var(--ui-content)
+        --ui-component-text: var(--ui-text)
+    &--flat, &--transparent
+      &:not(.ui-component--color)
+        --ui-component-background: var(--ui-text)
+        --ui-component-text: var(--ui-text)
+    &--text
+      &:not(.ui-component--color)
+        --ui-component-text: var(--ui-text)
+
+    // Has Color
+    &--basic, &--flat, &--transparent, &--text
+      &.ui-component--color
+        --ui-component-text: var(--ui-color)
+    &--full, &--flat, &--transparent
+      &.ui-component--color
+        --ui-component-background: var(--ui-color)
+    &--basic
+      &.ui-component--color
+        --ui-component-background: var(--ui-content)
+
+    // Text Change
+    &--basic, &--transparent, &--text
+      --ui-component-text-change: var(--ui-text)
+      --ui-component-text-change-gray: var(--ui-gray)
+    &--full, &--flat
+      --ui-component-text-change: var(--ui-component-text)
+      --ui-component-text-change-gray: var(--ui-component-text)
+
+    // Ripple
+    &--full, &--flat, &--transparent, &--text
+      .ui-ripple
+        --ui-ripple: var(--ui-component-text)
+        --ui-ripple-opacity: 0.3
+
+    // Loading
+    &--basic, &--full, &--flat, &--transparent
+      .ui-loading-root
+        --ui-loading-background: var(--ui-component-background)
+        --ui-loading-color: var(--ui-component-text)
+
+    // Main
+    &--basic, &--full
+      background: rgb(var(--ui-component-background))
+      color: rgb(var(--ui-component-text))
+      .ui-component-inherit
+        background: rgb(var(--ui-component-background))
+        color: rgb(var(--ui-component-text))
+    &--flat, &--transparent
+      background: rgba(var(--ui-component-background), var(--ui-component-background-opacity))
+      color: rgb(var(--ui-component-text))
+      .ui-component-inherit
+        background: rgba(var(--ui-component-background), var(--ui-component-background-opacity))
+        color: rgb(var(--ui-component-text))
+      

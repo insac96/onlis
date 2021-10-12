@@ -91,9 +91,6 @@ export default class uiSidebarItem extends uiComponentColor {
   onClick (event : any) {
     if(!this.isPointer) return
 
-    // Show Ripple
-    this.startRipple(event, this.$el as HTMLElement)
-
     // If is Target
     if(!!this.target) {
       this.$emit('click', event)

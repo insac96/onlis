@@ -1,5 +1,5 @@
 export interface ISelectOption {
-  id: number | string
-  value: any
+  id: string
+  value: string | number
   label: string
 }

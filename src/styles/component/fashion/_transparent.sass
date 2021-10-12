@@ -1,45 +1,11 @@
 .ui-component
   //Style
-  &.ui-component-fashion--transparent
+  &.ui-fashion--transparent
     --ui-component-background-opacity: 0
-    //Not Color
-    &:not(.ui-component--color)
-      --ui-component-background: var(--ui-content)
-      --ui-component-text: var(--ui-text)
-      // Child
-      &.ui-color--child
-        --ui-component-background: var(--ui-child)
-    //Has Color
-    &.ui-component--color
-      --ui-component-background: var(--ui-color)
-      --ui-component-text: var(--ui-color)
     //Active
-    &.ui-component--active, &:hover, &:active
+    &.ui-status--active, &:hover, &:active
+      --ui-component-text-change: var(--ui-component-text)
+      --ui-component-text-change-gray: var(--ui-component-text)
       --ui-component-background-opacity: 0.15
 
-  //Icon 
-  &.ui-component-fashion--transparent
-    --ui-component-icon-background: ''
-    --ui-component-icon-color: var(--ui-component-text)
-    --ui-component-icon-background-opacity: 0
-    &.ui-component--active
-      --ui-component-icon-background: var(--ui-component-text)
-      --ui-component-icon-background-opacity: 0.15
 
-  //Loading
-  &.ui-component-fashion--transparent
-    &.ui-component--loading
-      --ui-component-loading-background: var(--ui-component-background)
-      --ui-component-loading-color: var(--ui-component-text)
-      --ui-component-loading-background-opacity: 0.4
-
-  // Ripple
-  &.ui-component-fashion--transparent
-    &.ui-component--ripple
-      --ui-component-ripple: var(--ui-component-text)
-      --ui-component-ripple-opacity: 0.3
-
-  //Main
-  &.ui-component-fashion--transparent
-    background: rgba(var(--ui-component-background), var(--ui-component-background-opacity))
-    color: rgb(var(--ui-component-text))

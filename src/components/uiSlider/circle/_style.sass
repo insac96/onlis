@@ -1,0 +1,82 @@
+.ui-slider-circle
+  --ui-slider-circle-control: calc(var(--ui-slider-circle-line) * 2)
+  --ui-slide-circle-perimeter: calc((var(--ui-slider-circle-size) - var(--ui-slider-circle-line)) * 3.14)
+  
+.ui-slider-circle
+  width: var(--ui-slider-circle-size)
+  height: var(--ui-slider-circle-size)
+  border-radius: 50% !important
+
+  // Grabbing
+  &--grabbing
+    cursor: grabbing !important
+
+  // Tick
+  &__tick
+    width: 100%
+    height: 100%
+    border-radius: inherit
+    z-index: -1
+    &:before
+      content: ''
+      position: absolute
+      top: calc(var(--ui-slider-circle-line) / 2)
+      left: 50%
+      transform: translate(-50%, -50%)
+      width: 1px
+      height: calc(var(--ui-slider-circle-line) * 0.5)
+      background: rgb(var(--ui-component-text))
+    &--in
+      &:before
+        top: calc(var(--ui-slider-circle-control))
+    &--out
+      &:before
+        top: calc(var(--ui-slider-circle-control) * -0.5)
+
+  // SVG
+  &__svg
+    z-index: -1
+    circle
+      transition: stroke 0.25s ease, stroke-dashoffset 0.25s ease
+      transform: rotate(-90deg)
+      transform-origin: 50% 50%
+      &:nth-child(1)
+        stroke: rgba(var(--ui-component-text), 0.15)
+      &:nth-child(2)
+        stroke: rgb(var(--ui-component-text))
+        stroke-linecap: round
+        &.ui-status--loading
+          animation: slider-circle-effect 1.2s cubic-bezier(0.645, 0.045, 0.355, 1) infinite
+
+  // Control
+  &__control
+    width: 100%
+    height: 100%
+    border-radius: inherit
+    transform: rotate(var(--ui-slider-circle-rotate))
+    &__button
+      top: calc(var(--ui-slider-circle-line) / 2)
+      left: 50%
+      transform: translate(-50%, -50%)
+      width: var(--ui-slider-circle-control)
+      height: var(--ui-slider-circle-control)
+      background: rgb(var(--ui-component-text))
+      border-radius: inherit
+      cursor: grab
+      &:active
+        cursor: grabbing
+
+  // Content
+  &__content
+    top: 50%
+    left: 50%
+    max-width: calc(100% - var(--ui-slider-circle-line) * 2)
+    max-height: calc(100% - var(--ui-slider-circle-line) * 2)
+    transform: translate(-50%, -50%)
+
+  // Effect Loading
+  @keyframes slider-circle-effect
+    0%
+      stroke-dashoffset: var(--ui-slide-circle-perimeter)
+    100%
+      stroke-dashoffset: calc(var(--ui-slide-circle-perimeter) * -1)

@@ -1,26 +1,21 @@
 .ui-badge
-  --ui-color: var(--ui-success)
   --ui-badge-size: 12px
   --ui-badge-z-index: 2
 
 .ui-badge
+  z-index: 1
   .ui-badge-dot
     bottom: 0
     right: 0
     min-width: var(--ui-badge-size)
     min-height: var(--ui-badge-size)
-    background: rgb(var(--ui-color))
-    border: 1.2px solid rgb(var(--ui-text-light-dark))
-    z-index: var(--ui-badge-z-index)
-
+    z-index: var(--ui-badge-z-index) !important
     &--left
       right: auto
       left: 0
-    
     &--top
       bottom: auto
       top: 0
-
     &--text
       padding: 1px 4px
     

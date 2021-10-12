@@ -1,19 +1,31 @@
 import { Component, Prop } from 'vue-property-decorator'
 import uiComponent from '../base'
-import { uiRipple, uiRippleFull } from '../../public'
+import { uiRipple } from '../../../directives'
 import { getColor } from '../../../util'
 
-@Component
+@Component({
+  directives: {
+    'rippleComponent': uiRipple
+  }
+})
 export default class uiComponentColor extends uiComponent {
-  // Fashion
+  // Fashion Props
   @Prop({ type: String }) fashion!: string
 
   @Prop({ type: String }) fashionActive!: string
 
+  // Border Props
   @Prop({ type: Boolean }) border!: boolean
 
-  // Color
+  @Prop({ type: String }) borderColor!: string
+
+  // Shadow
+  @Prop({ type: Boolean, default: true }) shadow!: boolean
+
+  // Color Props
   @Prop({ type: String, default: 'primary' }) color!: string
+
+  @Prop({ type: Boolean }) primary!: boolean
 
   @Prop({ type: Boolean }) warn!: boolean
 
@@ -21,81 +33,84 @@ export default class uiComponentColor extends uiComponent {
 
   @Prop({ type: Boolean }) danger!: boolean
 
+  @Prop({ type: Boolean }) dark!: boolean
+
+  @Prop({ type: Boolean }) light!: boolean
+
   @Prop({ type: Boolean }) child!: boolean
 
-  // Ripple
+  // Ripple Props
   @Prop({ type: Boolean, default: true }) ripple! : boolean
 
-  onRipple: boolean = false
-
-  // Ripple Logic
-  addClassRipple () {
-    this.onRipple = true
-  }
-
-  removeClassRipple () {
-    this.onRipple = false
-  }
-
-  startRipple (event : any, el : HTMLElement) {
-    if(!this.ripple) return
-
-    if(this.fashion === 'flat-full') {
-      uiRippleFull(event, el, this.addClassRipple, this.removeClassRipple)
-    }
-    else {
-      uiRipple(event, el, this.addClassRipple, this.removeClassRipple)
-    }
-  }
-
-  // Color Logic
+  // Color
   get isColor () {
-    return !!this.color || !!this.isStatusColor
-  }
-
-  get isStatusColor () {
-    return !!this.success 
-    || !!this.warn 
-    || !!this.danger
+    return !!this.color || !!this.isMainColor
   }
 
   get isMainColor () {
-    return !this.isStatusColor && (this.color === 'primary' || this.color === 'dark' || this.color === 'light')
+    return !!this.primary
+    || !!this.warn
+    || !!this.success
+    || !!this.danger
+    || !!this.dark
+    || !!this.light
+  }
+
+  get isOtherColor () {
+    return !!this.color && !this.isMainColor
   }
 
   get classColor () {
     return {
       'ui-component--color': !!this.isColor,
-      'ui-color--child': !!this.child,
-      'ui-color--success': !!this.success,
+      'ui-background--child': !!this.child,
+      'ui-color--primary': !!this.primary,
       'ui-color--warn': !!this.warn,
+      'ui-color--success': !!this.success,
       'ui-color--danger': !!this.danger,
-      [`ui-color--${this.color}`]: !!this.isMainColor
+      'ui-color--dark': !!this.dark,
+      'ui-color--light': !!this.light
     }
   }
 
   get styleColor () {
     return {
-      '--ui-color': !!this.color && (!this.isStatusColor && !this.isMainColor) ? getColor(this.color) : null
+      '--ui-color': !!this.isOtherColor ? getColor(this.color) : null,
+      '--ui-border-color': getColor(this.borderColor)
     }
   }
 
-  // Fashion Logic
-  get getNowFashion () {
+  // Other
+  get isShadow () {
+    return !!this.shadow
+    && !this.border 
+    && this.fashion !== 'flat' 
+    && this.fashion !== 'transparent' 
+    && this.fashion !== 'text'
+  }
+
+  get isBorder () {
+    return !!this.border
+    && this.fashion !== 'text'
+  }
+
+  // Fashion
+  get nowFashion () {
+    const fashion = !!this.fashion ? this.fashion : 'basic'
+
     if(!this.isActive){
-      return this.fashion
+      return fashion
     }
     else {
-      return !!this.fashionActive ? this.fashionActive : this.fashion
+      return !!this.fashionActive ? this.fashionActive : fashion
     }
   }
 
   get classFashion () {
-    return {
-      'ui-component--ripple': !!this.onRipple,
-      'ui-component--border': !!this.border && this.fashion !== 'text',
-      'ui-component-fashion--basic': !this.fashion,
-      [`ui-component-fashion--${this.getNowFashion}`]: !!this.fashion
-    }
+    return [
+      `ui-fashion--${this.nowFashion}`,
+      { 'ui-component--border': !!this.isBorder },
+      { 'ui-component--shadow': !!this.isShadow }
+    ]
   }
 }

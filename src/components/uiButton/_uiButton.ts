@@ -1,7 +1,6 @@
 import { VNode } from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
-import { uiComponentColor } from '../../mixins/component'
-import { uiLoading } from '../../mixins/public'
+import { uiComponentColor, uiLoading } from '../../mixins'
 import { returnPX } from '../../util'
 
 @Component
@@ -15,15 +14,17 @@ export default class uiButton extends uiComponentColor {
 
   @Prop({ type: Boolean }) icon! : boolean
 
+  @Prop({ type: Boolean }) circle! : boolean
+
   @Prop({ type: Boolean }) block! : boolean
 
-  onClick (event : any) {
-    this.startRipple(event, this.$el as HTMLElement)
-    this.onLink()
-    this.$emit('click', event)
-  }
-
   public render(h: any): VNode {
+    const loading = h(uiLoading, { 
+      props: { 
+        full : true 
+      } 
+    })
+
     return h('button', {
       staticClass: 'ui-button',
       class: [
@@ -31,7 +32,6 @@ export default class uiButton extends uiComponentColor {
         {
           'd-inline-flex': !this.block,
           'd-flex': !!this.block,
-          'full-width': !!this.block
         },
         [
           'align-center',
@@ -40,11 +40,12 @@ export default class uiButton extends uiComponentColor {
           'user-none'
         ],
         {
-          'ui-button--icon': !!this.icon
+          'ui-size--m': !this.size,
+          [`ui-size--${this.size}`]: !!this.size
         },
         {
-          'ui-component--size--m': !this.size,
-          [`ui-component--size--${this.size}`]: !!this.size
+          'ui-button--icon': !!this.icon,
+          'ra-50': !!this.circle
         },
         this.classStatus,
         this.classFashion,
@@ -64,9 +65,15 @@ export default class uiButton extends uiComponentColor {
       on: {
         ...this.$listeners,
         click: this.onClick
-      }
+      },
+      directives: [
+        {
+          name: 'ripple-component',
+          value: !!this.ripple
+        }
+      ]
     }, [
-      !!this.isLoading && h(uiLoading),
+      !!this.isLoading && loading,
       this.$slots.default
     ]) 
   }

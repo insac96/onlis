@@ -1,7 +1,7 @@
 import { VNode } from 'vue'
-import { Model, Component, Prop, Watch } from 'vue-property-decorator'
-import { uiComponentColor } from '../../mixins/component'
-import { uiLoading, uiIconClose } from '../../mixins/public'
+import { ISelectOption } from '../../../types'
+import { Model, Component, Prop } from 'vue-property-decorator'
+import { uiComponentColor, uiLoading, uiIconClose } from '../../mixins'
 import { returnPX, getColor } from '../../util'
 
 @Component
@@ -10,7 +10,7 @@ export default class uiInput extends uiComponentColor {
 
   @Prop() width! : any
 
-  @Prop({ type: String, default: 'l' }) size! : string
+  @Prop({ type: String }) size! : string
 
   @Prop({ type: String, default: 'text' }) type! : string
 
@@ -18,39 +18,56 @@ export default class uiInput extends uiComponentColor {
 
   @Prop({ type: Boolean }) readOnly! : boolean
 
-  @Prop({ type: Boolean }) autoComplete! : boolean
+  @Prop({ type: Boolean }) iconFull! : boolean
 
-  @Prop({ type: String }) messageColor! : string
+  @Prop({ type: String }) messageLeftColor! : string
 
   @Prop({ type: String }) messageRightColor! : string
 
   @Prop({ type: Boolean }) remove! : boolean
 
-  isFocus : boolean = false
-
+  // Input Change
   onInput (event : any) {
     this.$emit('model', event.target.value)
     this.$emit('input', event.target.value)
   }
 
-  onClick (event : any) {
-    this.startRipple(event, this.$el as HTMLElement)
-    this.$emit('click', event)
-  }
-
-  onFocus (event : any) {
-    this.isFocus = true
-    this.$emit('focus', event)
-  }
-
-  onBlur (event : any) {   
-    this.isFocus = false
-    this.$emit('blur', event)
-  }
-
+  // Icon Remove Click
   onRemove () {
     this.$emit('model', null)
     this.$emit('remove')
+  }
+
+  // Render Message
+  renderMessage (position? : string) {
+    const slotName = `message-${position}`
+
+    return this.$createElement('transition', {
+      props: {
+        name: 'ui-zoom'
+      }
+    }, [
+      !!this.$slots[`${slotName}`] && this.$createElement('div', {
+        staticClass: `ui-input__message--${position}`,
+        class: [
+          'position-absolute',
+          'font-size-xs',
+          'font-weight-500',
+          'user-none',
+          'line-normal',
+          'transition',
+          'px-2 py-1'
+        ],
+        style: {
+          'top': 'var(--ui-component-size)',
+          'left': position === 'left' ? '0' : 'auto',
+          'right': position === 'right' ? '0' : 'auto',
+          'color': `rgb(var(--ui-input-${slotName}))`
+        }
+      }, [
+        this.$slots[`${slotName}`]
+      ])
+    ])
   }
 
   public render(h: any): VNode {
@@ -58,17 +75,15 @@ export default class uiInput extends uiComponentColor {
     const icon = h('div', {
       staticClass: 'ui-input__icon',
       class: [
-        'position-relative',
         'd-flex',
         'align-center',
         'justify-center',
-        'ra',
-        'line-normal',
         'user-none',
+        'line-normal',
         'transition',
-        'overflow-hidden',
         {
-          'cursor-pointer': !!this.$listeners.icon
+          'cursor-pointer': !!this.$listeners.icon,
+          'ui-input__icon--full': !!this.iconFull
         }
       ],
       on: {
@@ -82,18 +97,22 @@ export default class uiInput extends uiComponentColor {
     const inputDom = h('input', {
       staticClass: 'ui-input__dom',
       class: [
-        'grow-1',
-        'px-1',
+        'full-width',
         'transition',
+        'pr-2',
         {
-          'ui-input__dom--hasValue': !!this.value,
-          'ui-input__dom--dateTime': this.type === 'date' || this.type === 'time'
+          'pl-2': !this.$slots.icon || !!this.iconFull,
+        },
+        {
+          'ui-input__dom--value': !!this.value,
+          'ui-input__dom--picker': this.type === 'date' || this.type === 'time'
         }
       ],
       domProps: {
         id: `input-${this._uid}`,
         value: this.value,
-        autocomplete: !!this.autoComplete ? 'on' : 'off'
+        autocomplete: 'off',
+        size: ''
       },
       attrs: {
         ...this.$attrs,
@@ -104,11 +123,7 @@ export default class uiInput extends uiComponentColor {
       },
       on: {
         ...this.$listeners,
-
-        focus: this.onFocus,
-        blur: this.onBlur,
-        input: this.onInput,
-        click: this.onClick
+        input: this.onInput
       }
     })
 
@@ -119,93 +134,54 @@ export default class uiInput extends uiComponentColor {
       }
     })
 
+    // Icon Right
+    const iconRight = h('div', {
+      staticClass: 'ui-input__icon-right',
+      class: ['pr-2']
+    }, [
+      !!this.isLoading ? h(uiLoading) : iconRemove
+    ])
+
     // Right
     const right = h('div', {
       staticClass: 'ui-input__right',
       class: [
-        'position-relative',
         'd-flex',
         'align-center',
         'justify-center',
-        'mx-1',
+        'pr-1',
+        'user-none',
         'line-normal',
-        'user-none'
       ]
     }, [
-      !!this.isLoading ? h(uiLoading) : iconRemove
-    ])
-    
-    // Transition Right
-    const transitionRight =  h('transition', {
-      props: {
-        name: 'ui-zoom'
-      }
-    }, [
-      (!!this.isLoading || (!!this.remove && !!this.value)) && right
+      this.$slots.right
     ])
 
-    // Message Left
-    const message = h('transition', {
-      props: {
-        name: 'ui-zoom'
-      }
-    }, [
-      !!this.$slots.message && h('div', {
-        staticClass: 'ui-input__message--left',
-        class: [
-          'position-absolute',
-          'font-size-xs',
-          'font-weight-500',
-          'user-none',
-          'line-normal',
-          'transition'
-        ]
-      }, [
-        this.$slots.message
-      ])
-    ])
-
-    // Message Right
-    const messageRight = h('transition', {
-      props: {
-        name: 'ui-zoom'
-      }
-    }, [
-      !!this.$slots['message-right'] && h('div', {
-        staticClass: 'ui-input__message--right',
-        class: [
-          'position-absolute',
-          'font-size-xs',
-          'font-weight-500',
-          'user-none',
-          'line-normal',
-          'transition'
-        ]
-      }, [
-        this.$slots['message-right']
-      ])
-    ])
+    // Message
+    const messageLeft = this.renderMessage('left')
+    const messageRight = this.renderMessage('right')
 
     // Input
     return h('div', {
+      slot: 'target',
+      ref: 'input',
       staticClass: 'ui-input',
       class: [
         'ui-component',
         {
           'd-flex': !this.inline,
-          'd-inline-flex': !!this.inline,
+          'd-inline-flex': !!this.inline
         },
         [
+          'justify-space-between',
           'align-center',
-          'justify-space-between'
         ],
         {
-          'ui-component--size--l': !this.size ,
-          [`ui-component--size--${this.size}`]: !!this.size 
+          'ui-size--l': !this.size ,
+          [`ui-size--${this.size}`]: !!this.size 
         },
         {
-          'ui-input--focus': !!this.isFocus,
-          'ui-input--error': !!this.danger || this.color === 'danger',
+          'ui-input--error': !!this.danger || !!this.warn || this.color === 'danger' || this.color === 'warn',
         },
         this.classStatus,
         this.classFashion,
@@ -215,15 +191,22 @@ export default class uiInput extends uiComponentColor {
         this.styleColor,
         {
           '--ui-input-width': returnPX(this.width),
-          '--ui-input-message-color': getColor(this.messageColor),
-          '--ui-input-message-right-color': getColor(this.messageRightColor)
+          '--ui-input-message-left': getColor(this.messageLeftColor),
+          '--ui-input-message-right': getColor(this.messageRightColor)
+        }
+      ],
+      directives: [
+        {
+          name: 'ripple-component',
+          value: !!this.ripple
         }
       ]
     }, [
       !!this.$slots.icon && icon,
       inputDom,
-      transitionRight,
-      message,
+      (!!this.isLoading || (!!this.remove && !!this.value)) && iconRight,
+      !!this.$slots.right && right,
+      messageLeft,
       messageRight
     ])
   }

@@ -10,6 +10,8 @@ export default class uiBadge extends uiComponentColor {
 
   @Prop({ type: String, default: 'success' }) color! : any
 
+  @Prop({ type: [ String , Number ] }) text! : string | number
+
   @Prop() size! : any
 
   @Prop({ type: Boolean }) left! : boolean
@@ -23,6 +25,8 @@ export default class uiBadge extends uiComponentColor {
     const dot = h('div', {
       staticClass: 'ui-badge-dot',
       class: [
+        'ui-component',
+        'ui-fashion--full',
         'position-absolute',
         [
           'd-flex',
@@ -38,10 +42,15 @@ export default class uiBadge extends uiComponentColor {
           'transition'
         ],
         {
+          'ui-fashion--border': !!this.border,
           'ui-badge-dot--top': !!this.top,
           'ui-badge-dot--left': !!this.left,
           'ui-badge-dot--text': !!this.$slots.text,
-        }
+        },
+        this.classColor,
+      ],
+      style: [
+        this.styleColor
       ],
       directives: [
         {
@@ -50,7 +59,7 @@ export default class uiBadge extends uiComponentColor {
         }
       ]
     }, [ 
-      this.$slots.text
+      !!this.$slots.text ? this.$slots.text : this.text
     ])
 
     const dotTransition = h('transition', {
@@ -69,10 +78,9 @@ export default class uiBadge extends uiComponentColor {
           'd-inline-flex': !this.block,
           'd-flex': !!this.block
         },
-        this.classColor
+        
       ],
       style: [
-        this.styleColor,
         {
           '--ui-badge-size': returnPX(this.size),
           '--ui-badge-z-index': this.zIndex

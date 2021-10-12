@@ -1,6 +1,7 @@
 @import '_status'
 @import '_size'
 @import '_border'
+@import '_shadow'
 @import 'fashion'
 
 .ui-component
@@ -19,3 +20,7 @@
     box-sizing: border-box
     z-index: -1
     transition: all 0.25s ease
+
+.ui-component
+  &.ui-background--child
+    --ui-content: var(--ui-child)

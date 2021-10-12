@@ -1,2 +1,3 @@
 export { default as uiClickOutside }  from './clickOutside'
-export { default as uiObServe }  from './obServe'
+export { default as uiIntersect }  from './intersect'
+export { default as uiRipple } from './ripple'

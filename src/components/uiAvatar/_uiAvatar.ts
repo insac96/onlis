@@ -1,25 +1,18 @@
 import { VNode } from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
-import { uiComponentColor } from '../../mixins/component'
-import { uiLoading } from '../../mixins/public'
+import { uiComponentColor, uiLoading } from '../../mixins'
 import { returnPX } from '../../util'
 
 @Component
 export default class uiAvatar extends uiComponentColor {
 
-  @Prop({ type: String, default: null }) color! : string
+  @Prop({ type: String }) color! : string
 
   @Prop() size! : any
 
   @Prop() imgSize! : any
 
-  // On Click
-  onClick (event : any) {
-    if(!this.isPointer) return
-    this.startRipple(event, this.$el as HTMLElement)
-    this.onLink()
-    this.$emit('click', event)
-  }
+  @Prop({ type: Boolean }) circle! : boolean
 
   // Mini Text
   get miniText () {
@@ -36,6 +29,12 @@ export default class uiAvatar extends uiComponentColor {
   
   // Render
   public render(h: any): VNode {
+    const loading = h(uiLoading, { 
+      props: { 
+        full : true 
+      } 
+    })
+
     return h('div', {
       staticClass: 'ui-avatar',
       class: [
@@ -45,7 +44,10 @@ export default class uiAvatar extends uiComponentColor {
           'align-center',
           'justify-center',
           'user-none',
-          'line-normal'
+          'line-normal',
+          {
+            'ra-50': !!this.circle
+          }
         ],
         this.classStatus,
         this.classFashion,
@@ -65,9 +67,15 @@ export default class uiAvatar extends uiComponentColor {
         ...this.$listeners,
 
         click : this.onClick
-      }
+      },
+      directives: [
+        {
+          name: 'ripple-component',
+          value: !!this.ripple && !!this.isPointer
+        }
+      ]
     }, [
-      !!this.isLoading && h(uiLoading),
+      !!this.isLoading && loading,
       !!this.$slots.text ? this.miniText : this.$slots.default
     ])
   }

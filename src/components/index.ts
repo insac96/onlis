@@ -1,14 +1,11 @@
-//Avatar
-export { default as uiAvatar } from './uiAvatar'
-
 //Alert
 export { default as uiAlert } from './uiAlert'
 
+//Avatar
+export { default as uiAvatar } from './uiAvatar'
+
 //Badge
 export { default as uiBadge } from './uiBadge'
-
-//BottomSheet
-export { default as uiBottomSheet } from './uiBottomSheet'
 
 //Button
 export { default as uiButton } from './uiButton'
@@ -18,11 +15,6 @@ export { default as uiCard } from './uiCard'
 
 //Checkbox
 export { default as uiCheckBox } from './uiCheckbox'
-export { default as uiSwitch } from './uiSwitch'
-
-//Carousel
-export { default as uiCarousel } from './uiCarousel/base'
-export { default as uiCarouselItem } from './uiCarousel/item'
 
 //Chip
 export { default as uiChip } from './uiChip'
@@ -30,11 +22,14 @@ export { default as uiChip } from './uiChip'
 //Dialog
 export { default as uiDialog } from './uiDialog'
 
-//Input
-export { default as uiInput } from './uiInput'
-
 //Flex
 export { default as uiFlex } from './uiFlex'
+
+//Flex
+export { default as uiIcon } from './uiIcon'
+
+//Input
+export { default as uiInput } from './uiInput'
 
 //Loader
 export { default as uiLoader } from './uiLoader'
@@ -42,22 +37,12 @@ export { default as uiLoader } from './uiLoader'
 //Menu
 export { default as uiMenu } from './uiMenu'
 
-//Select
-export { default as uiSelect } from './uiSelect/base'
-export { default as uiSelectOption } from './uiSelect/option'
+//Slider
+export { default as uiSlider } from './uiSlider/base'
+export { default as uiSliderCircle } from './uiSlider/circle'
 
-//Process
-export { default as uiProcess } from './uiProcess/base'
-export { default as uiProcessCircle } from './uiProcess/circle'
-
-//Range
-export { default as uiRange } from './uiRange/base'
-export { default as uiRangeCircle } from './uiRange/circle'
-
-//List
-export { default as uiList } from './uiList/base'
-export { default as uiListGroup } from './uiList/group'
-export { default as uiListItem } from './uiList/item'
+//Switch
+export { default as uiSwitch } from './uiSwitch'
 
 
 

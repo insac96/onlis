@@ -1,21 +1,22 @@
-//Root Public
-.ui-button
-  --ui-button-width: auto
-
 // Main
 .ui-button
   width: var(--ui-button-width)
+  max-width: 100%
   height: var(--ui-component-size)
   font-size: var(--ui-component-font-size)
   border-radius: var(--ui-radius)
   padding: 0 var(--ui-space)
-  font-weight: 500
+  font-weight: 600
+
+  &.d-inline-flex
+    --ui-button-width: auto
+  &.d-flex
+    --ui-button-width: 100%
 
   .ui-loading-root
     --ui-loading-size: calc(var(--ui-component-size) * 0.6)
 
   &--icon
-    padding: 0 !important
     min-width: var(--ui-component-size)
     max-width: var(--ui-component-size)
     min-height: var(--ui-component-size)

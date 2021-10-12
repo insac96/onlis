@@ -1,6 +1,6 @@
 {
   "name": "onlis",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "UI Framework For VueJS",
   "author": {
     "name": "insac96",
@@ -21,7 +21,6 @@
   "unpkg": "dist/onlis.js",
   "types": "types/index.d.ts",
   "files": [
-    "src/",
     "dist/",
     "nuxt/",
     "lib/",

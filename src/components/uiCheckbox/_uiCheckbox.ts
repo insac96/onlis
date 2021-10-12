@@ -2,13 +2,15 @@ import { VNode } from 'vue'
 import { Model, Component, Prop } from 'vue-property-decorator'
 import { uiComponentColor } from '../../mixins/component'
 import { uiLoading, uiIconCheck } from '../../mixins/public'
-import { returnPX, is_Undefined } from '../../util'
+import { returnPX, is_Undefined, is_Boolean, is_Array } from '../../util'
 
 @Component
 export default class uiCheckBox extends uiComponentColor {
-  @Model('model') readonly model!: any
+  @Model('model', { type: [ String , Number , Array , Boolean ] }) readonly model!: any
 
-  @Prop([ String, Object, Number ]) value!: any
+  @Prop([ String, Number ]) value!: any
+
+  @Prop({ type: String, default: 'gray' }) borderColor! : any
 
   @Prop({ type: Boolean, default: undefined }) checked!: boolean
 
@@ -23,75 +25,43 @@ export default class uiCheckBox extends uiComponentColor {
   // Get Checked
   get isChecked () {
     if(!is_Undefined(this.checked)) return this.checked
-
     if(!!is_Undefined(this.model)) return false
 
-    if(typeof this.model == 'boolean'){
+    if(!!is_Boolean(this.model)){
       return this.model
     }
-    else if(Array.isArray(this.model)){
+    else if(!!is_Array(this.model)){
       if(!this.value) false 
+      const indexValue : number = this.model.indexOf(this.value)
 
-      const array : any[] = this.model
-      let isValueInModel : boolean
-
-      // Check Value
-      if(typeof this.value === 'object'){
-        isValueInModel = JSON.stringify(array).indexOf(JSON.stringify(this.value)) !== -1
-      } 
-      else {
-        isValueInModel = array.indexOf(this.value) !== -1
-      }
-
-      return isValueInModel
+      return indexValue !== -1
     }
     else {
       if(!this.value) return false
 
-      if(this.value === this.model) return true
-      else if(JSON.stringify(this.value) === JSON.stringify(this.model)) return true
-
-      return false
+      return this.value === this.model
     }
   }
 
   // Input
   onInput () : void {
-    if(!is_Undefined(this.checked)) return
-
     if(!!this.isLoading || !!this.isDisabled) return
+    if(!is_Undefined(this.checked)) return
     if(!!is_Undefined(this.model)) return
 
-    if(typeof this.model == 'boolean'){
+    if(!!is_Boolean(this.model)){
       this.$emit('model', !this.model)
     }
-    else if(Array.isArray(this.model)){
+    else if(!!is_Array(this.model)){
       if(!this.value) return
 
-      let array : any[] = this.model
-      let isValueInModel : boolean
-      let indexValue : number = 0
-
-      // Check Value
-      if(typeof this.value === 'object'){
-        isValueInModel = JSON.stringify(array).indexOf(JSON.stringify(this.value)) !== -1
-      } 
-      else {
-        isValueInModel = array.indexOf(this.value) !== -1
-      }
-
-      // Set Index Value
-      array.forEach((item : any, index : number) => {
-        if(JSON.stringify(item) === JSON.stringify(this.value)) {
-          indexValue = index
-        }
-      })
+      const indexValue : number = this.model.indexOf(this.value)
 
       // Update Model
-      if (isValueInModel) {
-        this.$delete(array, indexValue)
+      if (indexValue !== -1) {
+        this.$delete(this.model, indexValue)
       } else {
-        this.$set(array, array.length, this.value)
+        this.$set(this.model, this.model.length, this.value)
       }
     }
     else {
@@ -112,7 +82,7 @@ export default class uiCheckBox extends uiComponentColor {
     // Loading
     const loading = h(uiLoading, {
       props: {
-        small: true
+        full: true
       }
     })
 
@@ -230,8 +200,10 @@ export default class uiCheckBox extends uiComponentColor {
           'user-none'
         ],
         {
-          'ui-component-fashion--basic': !this.isChecked,
-          'ui-component-fashion--full': !!this.isChecked
+          'ui-component--shadow': !!this.isShadow,
+          'ui-component--border': !!this.isBorder && !this.isChecked,
+          'ui-fashion--basic': !this.isChecked,
+          'ui-fashion--full': !!this.isChecked
         },
         {
           'ui-checkbox--default': !this.switch,

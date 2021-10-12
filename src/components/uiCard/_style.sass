@@ -1,28 +1,32 @@
 // Root
 .ui-card
   --ui-card-width: 100%
-  --ui-card-text: var(--ui-text)
-  --ui-card-subtitle-text: var(--ui-gray)
   
 // Main
 .ui-card
   width: var(--ui-card-width)
+  max-width: 100%
   border-radius: var(--ui-radius)
 
-  &.ui-component-fashion--flat, &.ui-component-fashion--flat-full, &.ui-component-fashion--full
-    --ui-card-text: var(--ui-component-text)
-    --ui-card-subtitle-text: var(--ui-component-text)
+  .ui-loading-root
+    --ui-loading-size: var(--ui-size-mini)
 
   &__img
     border-radius: inherit
     img
       width: 100%
       border-radius: inherit
-
+      transition: all 0.25s ease
+      
   &__subtitle
-    color: rgb(var(--ui-card-subtitle-text))
+    color: rgb(var(--ui-component-text-change-gray))
 
   &__body, &__footer
-    color: rgb(var(--ui-card-text))
+    color: rgb(var(--ui-component-text-change))
+
+  &:hover, &:active
+    .ui-card__img
+      img
+        transform: scale(1.1)
 
  

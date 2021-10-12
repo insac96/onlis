@@ -1,0 +1,129 @@
+.ui-slider
+  --ui-slider-width: 100%
+  --ui-slider-size: 7px
+  --ui-slider-control: calc(var(--ui-slider-size) * 1.8)
+  --ui-slider-x : -50%
+  --ui-slider-tick-text: var(--ui-component-text)
+
+.ui-slider 
+  width: var(--ui-slider-width)
+  height: var(--ui-slider-size)
+  border-radius: var(--ui-radius)
+
+  // Init Message Color
+  &.ui-component--color
+    &:not(.ui-color--light)
+      --ui-slider-tick-text: var(--ui-color)
+
+  // Grabbing
+  &--grabbing
+    cursor: grabbing !important
+
+  // Right
+  &--right
+    --ui-slider-x: 50%
+
+  // Tick
+  &__tick
+    top: 50%
+    width: 1px
+    height: 50%
+    background: rgb(var(--ui-component-text-change-gray))
+    transform: translate(var(--ui-slider-x), -50%)
+
+  // Tick Text
+  &__tickText
+    top: calc(var(--ui-slider-control))
+    color: rgb(var(--ui-slider-tick-text))
+    transform: translate(var(--ui-slider-x), 0)
+    &--start
+      transform: translate(0)
+    &--end
+      transform: translate(calc(var(--ui-slider-x) * 2), 0)
+
+  // Line
+  &__line
+    top: 50%
+    height: 100%
+    max-width: var(--ui-slider-width)
+    max-height: var(--ui-slider-size)
+    background-color: rgb(var(--ui-component-text))
+    border-radius: inherit
+    transform: translateY(-50%)
+    animation: var(--ui-slider-animation) 1.2s cubic-bezier(0.645, 0.045, 0.355, 1) infinite
+
+  // Control
+  &__control
+    top: 50%
+    min-width: var(--ui-slider-control) 
+    min-height: var(--ui-slider-control)
+    background: rgb(var(--ui-component-text))
+    border-radius: inherit
+    transform: translate(var(--ui-slider-x), -50%)
+    cursor: grab
+    &:active
+      cursor: grabbing
+    
+  // Content
+  &__content
+    top: 0
+    background: rgb(var(--ui-component-text))
+    color: rgb(var(--ui-component-background))
+    padding: 2px 6px
+    border-radius: inherit
+    transform: translate(var(--ui-slider-x), -50%)
+    opacity: 0
+    visibility: hidden
+    &:before
+      content: ''
+      position: absolute
+      left: 50%
+      bottom: -1px
+      width: 5px
+      height: 5px
+      background: inherit
+      transform: translate(-50%, 0) rotate(45deg)
+    &--show
+      top: calc(var(--ui-slider-control) * -1.5)
+      opacity: 1
+      visibility: visible
+    &--start, &--end
+      &:before
+        visibility: hidden
+    
+  // Public Control, Content
+  &__control, &__content
+    &--start
+      transform: translate(0, -50%)
+    &--end
+      transform: translate(calc(var(--ui-slider-x) * 2), -50%)
+    
+
+  // Effect Loading
+  @keyframes slider-left-effect
+    0%
+      width: 0
+    25%
+      width: 100%
+    50%
+      width: 0
+      left: auto
+      right: 0
+    75%, 100%
+      width: 0
+      left: 0
+      right: auto
+
+  @keyframes slider-right-effect
+    0%
+      width: 0
+    25%
+      width: 100%
+    50%
+      width: 0
+      left: 0
+      right: auto
+    75%, 100%
+      width: 0
+      left: auto
+      right: 0

@@ -9,33 +9,14 @@ export default class uiCard extends uiComponentColor {
 
   @Prop({ default: null }) width! : any
 
-  onClick (event : any) {
-    if(!this.isPointer) return
-    this.startRipple(event, this.$el as HTMLElement)
-    this.onLink()
-    this.$emit('click', event)
-  }
-
-  renderSlot(name: string, type?: string | null, classDefault: boolean = false) {
-    const slot = !!type ? this.$slots[`${name}-${type}`] : this.$slots[`${name}`]
-    if(!slot) return null
-
-    return this.$createElement('div', {
-      staticClass: `ui-card__${name}`,
-      class: [
-        !!classDefault ? `ui-card__${name}--default` : null,
-        !!type ? `ui-card__${name}--${type}` : null
-      ]
-    }, [
-      slot
-    ])
-  }
+  @Prop({ type: Boolean }) noPadding! : boolean
+  
 
   public render(h: any): VNode {
     // Loading
     const loading = h(uiLoading, {
       props: {
-        large: true
+        full: true
       }
     })
 
@@ -45,7 +26,8 @@ export default class uiCard extends uiComponentColor {
       class: [
         'd-flex',
         'align-center',
-        'justify-center'
+        'justify-center',
+        'overflow-hidden'
       ]
     }, [
       this.$slots.img
@@ -59,8 +41,7 @@ export default class uiCard extends uiComponentColor {
         'font-size-l',
         'font-weight-700',
         'line-normal',
-        'user-none',
-        'transition'
+        'user-none'
       ]
     }, [
       this.$slots.title
@@ -86,9 +67,11 @@ export default class uiCard extends uiComponentColor {
       class: [
         'position-relative',
         'grow-1',
-        'pa-2',
-        'overflow',
-        'transition'
+        'py-2',
+        'transition',
+        {
+          'px-2': !this.noPadding
+        }
       ]
     }, [
       this.$slots.default
@@ -129,7 +112,13 @@ export default class uiCard extends uiComponentColor {
         ...this.$listeners,
         
         click: this.onClick
-      }
+      },
+      directives: [
+        {
+          name: 'ripple-component',
+          value: !!this.ripple && !!this.isPointer
+        }
+      ]
     }, [
       !!this.isLoading && loading,
       !!this.$slots.img && img,

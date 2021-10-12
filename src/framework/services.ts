@@ -19,6 +19,7 @@ export const init = (Vue : VueConstructor, options : IConfigs, ctx? : any) : ISe
     breakpoint: Vue.observable(new Services.Breakpoint(configs)),
     theme: Vue.observable(new Services.Theme(configs)),
     device: Vue.observable(new Services.Device(configs)),
+    icon: Vue.observable(new Services.Icon(configs)),
     isHydrationRender: !!configs.isSSR ? 'ready' : undefined
   }
 

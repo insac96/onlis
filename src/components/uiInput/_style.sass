@@ -1,89 +1,88 @@
 // Root
 .ui-input
-  --ui-input-width: 100%
-  --ui-input-icon-opacity: 0
-  --ui-input-text: var(--ui-text)
-  --ui-input-placeholder: var(--ui-gray)
-  --ui-input-placeholder-opacity: 1
-  --ui-input-message-color: var(--ui-component-text)
-  --ui-input-message-right-color: var(--ui-component-text)
-
-// Style
-.ui-input
-  &:not(.ui-component-fashion--basic), &--error
-    --ui-input-text: var(--ui-component-text)
-    --ui-input-placeholder: var(--ui-component-text)
-    --ui-input-placeholder-opacity: 0.5
-  
-  &.ui-component--color
-    --ui-input-message-color: var(--ui-color)
-    --ui-input-message-right-color: var(--ui-color)
-
-  .ui-icon-close
-    --ui-icon-close: var(--ui-component-text)
-    --ui-icon-close-size: var(--ui-component-font-size)
-    
-  .ui-loading-root
-    --ui-loading-background: ''
-    --ui-loading-size: var(--ui-component-font-size)
-
-  &--focus
-    --ui-input-icon-opacity: var(--ui-component-icon-background-opacity)
+  --ui-input-icon-size: calc(var(--ui-component-font-size) * 1.3)
+  --ui-input-message: var(--ui-component-text)
+  --ui-input-message-right: var(--ui-component-text)
 
 // Main
 .ui-input
   width: var(--ui-input-width)
-  min-height: var(--ui-component-size)
-  padding: 0 calc(var(--ui-space) / 2) 
+  height: var(--ui-component-size)
   border-radius: var(--ui-radius)
   font-size: var(--ui-component-font-size)
 
+  &.d-inline-flex
+    --ui-input-width: auto
+  &.d-flex
+    --ui-input-width: 100%
+
+  // Init Message Color
+  &.ui-component--color
+    --ui-input-message-left: var(--ui-color)
+    --ui-input-message-right: var(--ui-color)
+
+  &.ui-component--border
+    .ui-input__icon--full
+      border-right: 1px solid rgba(var(--ui-border-color), 1)
+
+  // Error
   &--error
-    &:not(.ui-component-fashion--text, .ui-component--border)
+    &.ui-fashion--basic
+      --ui-component-text: var(--ui-color) !important
+      --ui-component-text-change: var(--ui-color) !important
+    &:not(.ui-fashion--text, .ui-component--border)
       &:before
         box-shadow: 0px -1px rgba(var(--ui-component-text), 1)
 
+  // Close 
+  .ui-icon-close
+    --ui-icon-close: var(--ui-component-text)
+    --ui-icon-close-size: var(--ui-component-font-size)
+
+  // Loading
+  .ui-loading-root
+    --ui-loading-size: var(--ui-input-icon-size)
+
+  // Icon
   &__icon
-    min-width: calc(var(--ui-component-size) * 0.7)
-    min-height: calc(var(--ui-component-size) * 0.7)
-    background: rgba(var(--ui-component-icon-background), var(--ui-input-icon-opacity))
-    color: rgb(var(--ui-component-icon-color))
-    &.cursor-pointer
-      &:hover, &:active
-        --ui-input-icon-opacity: var(--ui-component-icon-background-opacity)
+    min-width: var(--ui-component-size)
+    min-height: var(--ui-component-size)
+    font-size:  var(--ui-input-icon-size)
+    border-top-left-radius: inherit
+    border-bottom-left-radius: inherit
+    &--full
+      background: rgba(var(--ui-component-text), 0.15) 
   
+  // Input Dom
   &__dom
-    height: var(--ui-component-size)
+    height: 100%
     background: none
-    color: rgb(var(--ui-input-text))
+    color: rgb(var(--ui-component-text-change))
     font-size: inherit
     &::placeholder
-      color: rgba(var(--ui-input-placeholder), var(--ui-input-placeholder-opacity))
-    &:focus, &--focus
-      padding-left: var(--ui-space)
-    &--dateTime
+      color: rgb(var(--ui-component-text-change-gray), 0.7)
+    &--picker
       -webkit-appearance: none
-      &:not(.ui-input__dom--hasValue)
+      &:not(.ui-input__dom--value)
         &::before
-          color: rgb(var(--ui-input-placeholder), var(--ui-input-placeholder-opacity))
+          color: rgb(var(--ui-component-text-change-gray), 0.7)
           content: attr(placeholder)
       &::-webkit-inner-spin-button, &::-webkit-calendar-picker-indicator
         display: none
         -webkit-appearance: none
 
-  &__right
-    min-width: var(--ui-component-font-size)
-    min-height: var(--ui-component-font-size)
+  &__select
+    height: 100%
+    color: rgb(var(--ui-component-text-change-gray), 0.7)
+    &--value
+      color: rgb(var(--ui-component-text-change))
 
-  &__message--left, &__message--right
-    top: var(--ui-component-size)
-    padding: calc(var(--ui-space) * 0.5) var(--ui-space)
-  &__message--left
-    left: 0
-    color: rgb(var(--ui-input-message-color))
-  &__message--right  
-    right: 0
-    color: rgb(var(--ui-input-message-right-color))
+// Options
+.ui-input-options
+  --ui-input-options-max-height: auto
+  max-height: var(--ui-input-options-max-height)
+  z-index: 100000
 
+    
   
     

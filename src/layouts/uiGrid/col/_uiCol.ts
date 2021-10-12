@@ -25,6 +25,7 @@ export default class uiCol extends Vue {
     return h('div', {
       staticClass: 'ui-col',
       class: [
+        'position-relative',
         `ui-col--w-${this.w}`,
         `ui-col--offset-${this.offset}`,
         `ui-col--xl-${this.xl}`,

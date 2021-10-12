@@ -13,7 +13,7 @@ export default class uiChip extends uiComponentColor {
 
   @Prop({ type: String, default: 'full' }) fashion! : string
 
-  @Prop({ type: String, default: null }) color! : string
+  @Prop({ type: String }) color! : string
 
   @Prop() width! : any
 
@@ -23,18 +23,8 @@ export default class uiChip extends uiComponentColor {
 
   isShow: boolean = true
 
-  // On Click
-  onClick (event : any) {
-    if(!this.isPointer) return
-    this.startRipple(event, this.$el as HTMLElement)
-    this.onLink()
-    this.$emit('click', event)
-  }
-
   // Remove
   onRemove (event : any) {
-    this.startRipple(event, this.$el as HTMLElement)
-
     setTimeout(() => {
       if(!!is_Undefined(this.value)){
         this.isShow = false
@@ -49,25 +39,22 @@ export default class uiChip extends uiComponentColor {
 
   // Render
   public render(h: any): VNode {
+    // Remove
     const remove = h(uiIconClose, {
       on: {
         click: this.onRemove.bind(this)
       }
     })
 
+    // Right
     const right = h('div', {
       staticClass: 'ui-chip__right',
-      class: [
-        'position-relative',
-        'd-flex',
-        'align-center',
-        'justify-center',
-        'ml-2'
-      ]
+      class: ['ml-1']
     }, [ 
       !!this.isLoading ? h(uiLoading) : remove
     ])
 
+    // Chip
     const chip = h('div', {
       staticClass: 'ui-chip',
       ref: 'chip',
@@ -81,8 +68,8 @@ export default class uiChip extends uiComponentColor {
           'user-none'
         ],
         {
-          'ui-component--size--s': !this.size,
-          [`ui-component--size--${this.size}`]: !!this.size 
+          'ui-size--s': !this.size,
+          [`ui-size--${this.size}`]: !!this.size 
         },
         this.classStatus,
         this.classFashion,
@@ -106,6 +93,10 @@ export default class uiChip extends uiComponentColor {
         {
           name: 'show',
           value: !is_Undefined(this.value) ? this.value : this.isShow
+        },
+        {
+          name: 'ripple-component',
+          value: !!this.ripple && (!!this.isPointer || !!this.remove)
         }
       ]
     }, [

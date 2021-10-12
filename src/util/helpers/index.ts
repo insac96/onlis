@@ -9,6 +9,10 @@ function isObjectLike(value : any) : boolean {
   return typeof value === 'object' && value !== null
 }
 
+export const is_Array = (value : any) : boolean => {
+  return Array.isArray(value)
+}
+
 export const is_Boolean = (value : any) : boolean => {
   return value === true 
   || value === false 
@@ -86,8 +90,8 @@ export const getObject = (value : any) : any => {
   return !!is_Object(newValue) ? newValue : undefined
 }
 
-export const toLowerCase = (text : string, replaceSpace? : string) : string => {
-  let string = text
+export const toLowerCase = (text : string | number, replaceSpace? : string) : string => {
+  let string = text.toString()
   const replace = replaceSpace ? replaceSpace : ''
 
   string = string.toLowerCase()

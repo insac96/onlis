@@ -1,9 +1,6 @@
 .ui-component
-  &--pointer
-    cursor: pointer !important
-
-  &--disabled
-    opacity: var(--ui-disabled-opacity)
-
-  &--disabled, &--loading
-    pointer-events: none !important
+  &.ui-status
+    &--disabled
+      opacity: var(--ui-disabled-opacity)
+    &--disabled, &--loading
+      pointer-events: none

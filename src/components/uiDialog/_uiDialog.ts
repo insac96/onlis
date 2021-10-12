@@ -12,7 +12,17 @@ export default class uiDialog extends uiComponentColor {
 
   @Prop({ type: Boolean }) absolute! : boolean
 
-  @Prop() maxWidth! : any
+  @Prop({ type: Boolean }) top! : boolean
+
+  @Prop({ type: Boolean }) bottom! : boolean
+
+  @Prop({ type: Boolean }) fullScreen! : boolean
+
+  @Prop({ type: Boolean }) noSpace! : boolean
+
+  @Prop({ type: Boolean }) noEffect! : boolean
+
+  @Prop() width! : any
 
   @Prop() maxHeight! : any
 
@@ -20,15 +30,11 @@ export default class uiDialog extends uiComponentColor {
 
   @Prop({ type: Boolean }) hideClose! : boolean
 
-  @Prop({ type: Boolean }) shake! : boolean
-
-  @Prop({ type: Boolean }) fullScreen! : boolean
-
   @Prop({ type: Boolean }) custom! : boolean
 
-  @Prop({ type: Boolean, default: true }) blur! : boolean
+   @Prop({ type: Boolean }) shake! : boolean
 
-  @Prop({ type: Boolean }) bottom! : boolean
+  @Prop({ type: Boolean, default: true }) blur! : boolean
 
   @Prop({ type: Object }) control! : IDialogControl
 
@@ -36,13 +42,25 @@ export default class uiDialog extends uiComponentColor {
 
   isShake: boolean = false
 
-  // Control
+  // Control Position
   get controlConfig () {
     return {
       top: false,
       right: false,
       block: false,
       ...this.control
+    }
+  }
+
+  // Effect Control
+  get effectControl () {
+    if(!this.controlConfig.block){
+      if(!this.controlConfig.right) return 'ui-right'
+      else return 'ui-left'
+    }
+    else {
+      if(!this.controlConfig.top) return 'ui-up'
+      else return 'ui-down'
     }
   }
 
@@ -59,8 +77,12 @@ export default class uiDialog extends uiComponentColor {
 
   // On Close
   onClose () {
-    if(!!this.custom) return this.$emit('custom-close')
-    else return this.$emit('model', false)
+    if(!!this.custom){
+      this.$emit('custom-close')
+    }
+    else {
+      this.$emit('model', false)
+    }
   }
 
   // Insert to Parent
@@ -99,7 +121,7 @@ export default class uiDialog extends uiComponentColor {
     this.$nextTick(() => this.$emit('hide'))
   }
 
-  // Vue Function
+  // Watch Value
   @Watch('value')
   onValueChange(val: boolean) {
     if (!!val) {
@@ -110,6 +132,7 @@ export default class uiDialog extends uiComponentColor {
     }
   }
 
+  // Watch Shake
   @Watch('shake')
   onShakeChange(val: boolean) {
     if(!val) return
@@ -118,10 +141,12 @@ export default class uiDialog extends uiComponentColor {
     this.$emit('update:shake', false)
   }
 
+  // Mounted
   mounted() {
     if(!!this.value) return this.show()
   }
 
+  // Before Destroy
   beforeDestroy () {
     this.removeDialog()
   }
@@ -131,13 +156,15 @@ export default class uiDialog extends uiComponentColor {
     // Icon Loading
     const loading = h(uiLoading, {
       props: {
-        large: true
+        large: true,
+        full: true
       }
     })
 
     // Icon Close
     const close = h(uiIconClose, {
-      staticClass: 'ui-dialog__close',
+      staticClass: 'ui-dialog__content__close',
+      class: ['position-absolute'],
       on: {
         click: this.onClose
       }
@@ -145,9 +172,8 @@ export default class uiDialog extends uiComponentColor {
 
     // Title
     const title = h('div', {
-      staticClass: 'ui-dialog__title',
+      staticClass: 'ui-dialog__content__title',
       class: [
-        'position-relative',
         'pa-2',
         'font-size-xl',
         'font-weight-700',
@@ -161,42 +187,31 @@ export default class uiDialog extends uiComponentColor {
 
     // Header
     const header = h('div', {
-      staticClass: 'ui-dialog__header',
-      class: [
-        'position-relative',
-        'pa-2'
-      ]
+      staticClass: 'ui-dialog__content__header',
+      class: ['pa-2']
     }, [
       this.$slots.header
     ])
 
     // Body
     const body = h('div', {
-      staticClass: 'ui-dialog__body',
-      class: [
-        'position-relative',
-        'pa-2',
-        'grow-1',
-        'overflow'
-      ]
+      staticClass: 'ui-dialog__content__body',
+      class: ['pa-2', 'grow-1']
     }, [
       this.$slots.default
     ])
 
     // Footer
     const footer = h('div', {
-      staticClass: 'ui-dialog__footer',
-      class: [
-        'position-relative',
-        'pa-2'
-      ]
+      staticClass: 'ui-dialog__content__footer',
+      class: ['pa-2' ]
     }, [
       this.$slots.footer
     ])
 
     // Content
     const dialog = h('div', {
-      staticClass: 'ui-dialog',
+      staticClass: 'ui-dialog__content',
       class: [
         'ui-component',
         'd-flex',
@@ -207,7 +222,7 @@ export default class uiDialog extends uiComponentColor {
       ]
     }, [
       !!this.loading && loading,
-      !this.hideClose && !this.loading && close,
+      (!this.hideClose && !this.loading) && close,
       !!this.$slots.title && title,
       !!this.$slots.header && header,
       !!this.$slots.default && body,
@@ -216,7 +231,7 @@ export default class uiDialog extends uiComponentColor {
 
     // OverLay
     const overlay = h('div', {
-      staticClass: 'ui-dialog-overlay',
+      staticClass: 'ui-dialog__overlay',
       class: [
         'position-absolute',
         'cursor-pointer'
@@ -232,24 +247,24 @@ export default class uiDialog extends uiComponentColor {
 
     // Control
     const control = h('div', {
-      staticClass: 'ui-dialog-control',
+      staticClass: 'ui-dialog__control',
       class: [
         'position-absolute',
         'pa-2',
         'overflow-x',
         {
-          'ui-dialog-control--block': !!this.controlConfig.block,
-          'ui-dialog-control--top': !!this.controlConfig.top,
-          'ui-dialog-control--right': !!this.controlConfig.right
+          'ui-dialog__control--block': !!this.controlConfig.block,
+          'ui-dialog__control--top': !!this.controlConfig.top,
+          'ui-dialog__control--right': !!this.controlConfig.right,
         }
-      ]
+      ],
     }, [
       this.$slots.control
     ])
 
     // Root
     const root = h('div', {
-      staticClass: 'ui-dialog-root',
+      staticClass: 'ui-dialog',
       ref: 'dialog',
       class: [
         [
@@ -258,7 +273,8 @@ export default class uiDialog extends uiComponentColor {
           'overflow-hidden'
         ],
         {
-          'align-center': !this.bottom,
+          'align-start': !!this.top,
+          'align-center': !this.top && !this.bottom,
           'align-end': !!this.bottom
         },
         {
@@ -266,34 +282,38 @@ export default class uiDialog extends uiComponentColor {
           'position-absolute': !!this.absolute,
         },
         {
-          'ui-dialog-root--blur': !!this.blur,
-          'ui-dialog-root--shake': !!this.isShake
+          'ui-dialog--blur': !!this.blur,
+          'ui-dialog--shake': !!this.isShake
         },
         {
-          'ui-dialog-root--bottom': !!this.bottom,
-          'ui-dialog-root--fullScreen': !!this.fullScreen,
+          'ui-dialog--no-space': !!this.noSpace,
+          'ui-dialog--no-effect': !!this.noEffect,
+          'ui-dialog--center': !this.top && !this.bottom && !this.fullScreen,
+          'ui-dialog--top': !!this.top,
+          'ui-dialog--bottom': !!this.bottom,
+          'ui-dialog--fullScreen': !!this.fullScreen,
         }
       ],
       style: [
         this.styleColor,
         {
-          '--ui-dialog-max-width': returnPX(this.maxWidth),
+          '--ui-dialog-width': returnPX(this.width),
           '--ui-dialog-max-height': returnPX(this.maxHeight)
         }
       ]
     }, [
       overlay,
       dialog,
-      !!this.$slots.control && !this.fullScreen && control
+      (!!this.$slots.control && !this.fullScreen) && control
     ])
 
     // Return
     return h('transition', {
       props: {
-        name: 'ui-dialog'
+        name: 'effect-dialog'
       }
     }, [
-      this.isShow && root
+      !!this.isShow && root
     ])
   }
 }

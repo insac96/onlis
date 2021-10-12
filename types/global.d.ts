@@ -17,6 +17,12 @@ declare global {
 
   interface HTMLElement {
     _clickOutside?: EventListener,
-    _observe?: IntersectionObserver
+    _ripple?: {
+      active?: boolean
+      center?: boolean
+      save?: boolean
+      handler?: EventListener
+    },
+    _intersect?: IntersectionObserver
   }
 }

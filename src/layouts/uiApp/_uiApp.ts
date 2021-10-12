@@ -1,5 +1,6 @@
 import Vue, { VNode } from 'vue'
-import { Component } from 'vue-property-decorator'
+import { Component, Watch } from 'vue-property-decorator'
+import { uiRipple } from '../../directives'
 
 @Component
 export default class uiApp extends Vue {
@@ -16,6 +17,10 @@ export default class uiApp extends Vue {
   public render(h: any): VNode {
     return h('div', {
       staticClass: 'ui-app',
+      class: [
+        'position-relative',
+        'transition'
+      ],
       domProps: {
         id: '_app_'
       },

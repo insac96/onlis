@@ -16,6 +16,7 @@ export default class uiMain extends Vue {
     const content = h('div', {
       staticClass: 'ui-main-content',
       class: [
+        'transition',
         `pa-${this.padding}`
       ]
     }, [

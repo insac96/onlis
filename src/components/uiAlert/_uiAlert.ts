@@ -1,7 +1,6 @@
 import { VNode } from 'vue'
 import { Component, Prop, Model } from 'vue-property-decorator'
-import { uiComponentColor } from '../../mixins/component'
-import { uiLoading, uiIconClose } from '../../mixins/public'
+import { uiComponentColor, uiLoading, uiIconClose } from '../../mixins'
 import { returnPX } from '../../util'
 
 @Component
@@ -12,14 +11,13 @@ export default class uiAlert extends uiComponentColor {
 
   @Prop() iconSize! : any
 
-  @Prop({ type: Boolean }) center! : boolean
+  @Prop({ type: Boolean, default: true }) center! : boolean
 
   @Prop({ type: String, default: 'right' }) effect! : string
 
   onClick (event : any) {
     if(!this.isPointer) return
     this.onLink()
-    this.startRipple(event, this.$el as HTMLElement)
     this.$emit('click', event)
   }
   
@@ -34,18 +32,13 @@ export default class uiAlert extends uiComponentColor {
         'ra', 
         'mr-2',
         'line-normal',
-        'transition',
         'user-none',
         {
           'cursor-pointer': !!this.$listeners.icon
         }
       ],
       on: {
-        click: (event : any) => {
-          if(!this.$listeners.icon) return
-          this.startRipple(event, this.$el as HTMLElement)
-          this.$emit('icon')
-        }
+        click: () => this.$emit('icon')
       }
     }, [
       this.$slots.icon
@@ -65,8 +58,7 @@ export default class uiAlert extends uiComponentColor {
       class: [
         'user-none',
         'line-normal',
-        'font-weight-700',
-        'transition'
+        'font-weight-700'
       ]
     }, [
       this.$slots.title
@@ -75,12 +67,7 @@ export default class uiAlert extends uiComponentColor {
     // Content Body
     const body = h('div', {
       staticClass: 'ui-alert__body',
-      class: [
-        'font-size-s',
-        'transition',
-        'position-relative',
-        'transition'
-      ]
+      class: ['font-size-s']
     }, [
       this.$slots.default
     ])
@@ -90,8 +77,8 @@ export default class uiAlert extends uiComponentColor {
       class: [
         'd-flex',
         'flex-column',
+        'full-width',
         'grow-1',
-        'mx-auto',
       ]
     }, [
       !!this.$slots.title && title,
@@ -101,10 +88,7 @@ export default class uiAlert extends uiComponentColor {
     // Right
     const right = h('div', {
       staticClass: 'ui-alert__right',
-      class: [ 
-        'ml-2', 
-        'position-relative'
-      ]
+      class: [ 'ml-2' ]
     }, [
       !!this.isLoading ? h(uiLoading) : this.$slots.right
     ])
@@ -139,6 +123,10 @@ export default class uiAlert extends uiComponentColor {
         {
           name: 'show',
           value: !!this.value
+        },
+        {
+          name: 'ripple-component',
+          value: !!this.ripple && (!!this.isPointer || !!this.$listeners.icon)
         }
       ]
     }, [

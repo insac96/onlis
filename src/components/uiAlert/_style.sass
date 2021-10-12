@@ -1,36 +1,25 @@
 .ui-alert
   --ui-alert-width: 100%
-  --ui-alert-body-text: var(--ui-text)
-  --ui-alert-icon-size: 30px
+  --ui-alert-icon-size: var(--ui-size-s)
 
 .ui-alert
   width: var(--ui-alert-width)
+  max-width: 100%
   padding: var(--ui-space)
   border-radius: var(--ui-radius)
 
-  .ui-icon-close
-    --ui-icon-close: var(--ui-component-text)
-    --ui-icon-close-size: 18px
-
   .ui-loading-root
-    --ui-loading-background: ''
     --ui-loading-size: 18px
 
-  &.ui-component-fashion--flat, &.ui-component-fashion--flat-full, &.ui-component-fashion--full
-    --ui-alert-body-text: var(--ui-component-text)
- 
   &__icon
-    width: var(--ui-alert-icon-size)
-    height: var(--ui-alert-icon-size)
-    background: rgba(var(--ui-component-icon-background), var(--ui-component-icon-background-opacity))
-    color: rgb(var(--ui-component-icon-color)) 
+    min-width: var(--ui-alert-icon-size)
+    min-height: var(--ui-alert-icon-size)
+    max-width: var(--ui-alert-icon-size)
+    max-height: var(--ui-alert-icon-size)
+    background: rgba(var(--ui-component-text), 0.1)
 
   &__body
-    color: rgb(var(--ui-alert-body-text))
-
-  &__right
-    min-width: 20px
-    min-height: 20px
+    color: rgb(var(--ui-component-text-change))
 
     
       
